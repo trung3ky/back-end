@@ -1,21 +1,24 @@
 var express = require('express');
+const bodyParser = require('body-parser')
 var app = express();
+const cors = require('cors')
 
-var accountController = require("./controller/account");
-var productController = require("./controller/product");
-var rateController = require("./controller/rate");
-// var siginController = require("./controller/siginController");
-// var chat = require("./controller/chat");
+
 var server = require('http').createServer(app);
-// var io = require('socket.io')(server);
+
+app.use('/assets', express.static(__dirname + "/public"));
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+app.use(cors())
 
 // cổng cho server
 var port = 8000;
 
-//đường dẫn public cho người dùng
-// app.use('/assets', express.static(__dirname + "/public"));
-// app.set("view engine", "ejs"); //tạo view ejs
-
+var accountController = require("./controller/account");
+var productController = require("./controller/product");
+var rateController = require("./controller/rate");
 
 accountController(app);
 productController(app);

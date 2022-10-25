@@ -28,10 +28,9 @@ module.exports = function(app) {
         });
     })
 
-    app.post('/product/create_product', urlencodeParser, function(req, res) {
-        console.log("🚀 ~ file: product.js ~ line 32 ~ app.post ~ req", req.body)
+    app.post('/product/create_product', function(req, res) {
+       
         const name = req.body.name ?? null;
-        console.log("🚀 ~ file: product.js ~ line 33 ~ app.post ~ req.body.name", req.body.name)
         const category_id = req.body.category_id ?? null;
         const shop_id = req.body.shop_id ?? null;
         const image = req.body.image ?? null;
@@ -51,3 +50,5 @@ module.exports = function(app) {
         });
     })
 }
+
+
