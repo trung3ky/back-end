@@ -3,11 +3,22 @@ var urlencodeParser = bodyParser.urlencoded({ extended: false });
 var parserJson = bodyParser.json();
 var connection = require('./db');
 var TimeNow = require('./atom');
+const { spawn } = require('child_process')
+const { PythonShell } = require('python-shell')
+
+// let option = {
+//     // scriptPath: 'E:/pyshell',
+//     args: ['trung', 22]
+// }
 
 module.exports = function(app) {
     app.get('/rate', function(req, res, next) {
+        // PythonShell.run('python\\recommend.py', option, (err, res) => {
+        //     if(err) console.log(err)
+        //     if(res) console.log(res)
+        // })
         const max_results = req.query.max_results ?? 25;
-        var sql = `select * from rating where deleted = 0 limit ${max_results}`;
+        var sql = `select * from ratings limit ${max_results}`;
         
         connection.query(sql, function(err, result) {
             if (err) {
@@ -19,7 +30,7 @@ module.exports = function(app) {
     
     app.get('/rate/:rate_id', function(req, res) {
         const rateId = req.params['rate_id']
-        var sql = "select * from rating where id = '" + rateId + "' and deleted = 0 ";
+        var sql = "select * from ratings where id = '" + rateId + "'";
         connection.query(sql, function(err, result) {
             if (err) {
                 throw err;
@@ -34,7 +45,7 @@ module.exports = function(app) {
 
     app.get('/rate/product/:product_id', function(req, res) {
         const productId = req.params['product_id']
-        var sql = "select * from rating where productid = '" + productId + "' and deleted = 0 ";
+        var sql = "select * from ratings where productid = '" + productId + "'";
         connection.query(sql, function(err, result) {
             if (err) {
                 throw err;
@@ -54,7 +65,7 @@ module.exports = function(app) {
         const content = req.body.content ?? null;
         const rating = req.body.rating ?? null;
 
-        var sql = `insert into rating(userid, productid, rating, content, deleted, created_at, updated_at) 
+        var sql = `insert into ratings(userid, productid, rating, content, deleted, created_at, updated_at) 
         values('${userId}', '${productId}', ${rating}, '${content}', 0, '${TimeNow()}', '${TimeNow()}')`;
 
         connection.query(sql, function(err, result) {
@@ -72,7 +83,7 @@ module.exports = function(app) {
         const content = req.body.content ?? null;
         const rating = req.body.rating ?? null;
 
-        var sql = `UPDATE rating
+        var sql = `UPDATE ratings
         SET content =' ${content}',
         rating = ${rating},
         updated_at = '${TimeNow()}'
@@ -89,9 +100,7 @@ module.exports = function(app) {
 
     app.post('/rate/delete_rate/:rate_id', urlencodeParser, function(req, res) {
         const rateId = req.params['rate_id']
-        var sql = `UPDATE rating
-        SET deleted = 1
-        WHERE id = '${rateId}'`;
+        var sql = `DELETE FROM ratings WHERE id = '${rateId}'`;
 
         connection.query(sql, function(err, result) {
             if (err) {

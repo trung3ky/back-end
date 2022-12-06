@@ -8,7 +8,7 @@ const uuid = require('uuid');
 module.exports = function(app) {
     app.get('/product', function(req, res, next) {
         const max_results = req.query.max_results ?? 25;
-        var sql = `select * from products where deleted = 0 limit ${max_results}`;
+        var sql = `select * from product_new limit ${max_results}`;
         
         connection.query(sql, function(err, result) {
             if (err) {
@@ -20,7 +20,7 @@ module.exports = function(app) {
     
     app.get('/product/:product_id', function(req, res) {
         const productId = req.params['product_id']
-        var sql = "select * from products where id = '" + productId + "' and deleted = 0";
+        var sql = "select * from product_new where id = '" + productId + "'";
         connection.query(sql, function(err, result) {
             if (err) {
                 throw err;
@@ -43,8 +43,8 @@ module.exports = function(app) {
         const price = req.body.price ?? null;
         const sale = req.body.sale ?? null;
 
-        var sql = `insert into products(id, brand, slug, id_shop, id_category, name, image, description, quanlity, price, sale, rating, others, deleted, created_at, updated_at) 
-        values('${uuid.v4()}', null, null, ${shop_id}, ${category_id}, '${name}', '${image}', '${description}', ${quanlity}, ${price}, ${sale}, null, null, 0, '${TimeNow()}', '${TimeNow()}')`;
+        var sql = `insert into product_new(id_shop, id_category, product_name, product_image, product_description, product_quanlity, product_price, created_at, updated_at) 
+        values(${shop_id}, ${category_id}, '${name}', '${image}', '${description}', ${quanlity}, ${price}, '${TimeNow()}', '${TimeNow()}')`;
 
         connection.query(sql, function(err, result) {
             if (err) {
@@ -57,9 +57,7 @@ module.exports = function(app) {
 
     app.post('/product/delete_product/:product_id', urlencodeParser, function(req, res) {
         const productId = req.params['product_id']
-        var sql = `UPDATE products
-        SET deleted = 1
-        WHERE id = '${productId}'`;
+        var sql = `DELETE FROM product_new WHERE id = '${productId}'`;
 
         connection.query(sql, function(err, result) {
             if (err) {
@@ -79,16 +77,14 @@ module.exports = function(app) {
         const description = req.body?.description ?? null;
         const quanlity = req.body?.quanlity ?? null;
         const price = req.body?.price ?? null;
-        const sale = req.body?.sale ?? null;
         
-        var sql = `UPDATE products
+        var sql = `UPDATE product_new
         SET name =' ${name}',
         category_id = ${category_id},
-        image =' ${image}',
-        description = '${description}',
-        quanlity = ${quanlity},
-        price = ${price},
-        sale = ${sale},
+        product_image =' ${image}',
+        product_description = '${description}',
+        product_quanlity = ${quanlity},
+        product_price = ${price},
         updated_at = '${TimeNow()}'
         WHERE id = '${productId}'`;
 
