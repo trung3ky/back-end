@@ -369,6 +369,4 @@ def recommend(user_id):
 	#     print(type(words))
 	#     print(recomend[0])
 	   
-
-
-recommend(1)
+recommend(sys.argv[1])

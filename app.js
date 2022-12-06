@@ -19,10 +19,12 @@ var port = 8000;
 var accountController = require("./controller/account");
 var productController = require("./controller/product");
 var rateController = require("./controller/rate");
+var recommendController = require("./controller/recommend");
 
 accountController(app);
 productController(app);
 rateController(app);
+recommendController(app);
 // siginController(app);
 // chat(app);
 
