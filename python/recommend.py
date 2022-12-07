@@ -25,18 +25,23 @@ warnings.filterwarnings('ignore')
 import os
 import re
 import seaborn as sns
+from csv import reader, writer
 
 def recommend(user_id):
 	print("running")
 
-	books = pd.read_csv('data\\product_new.csv', sep=';', error_bad_lines=False, encoding="latin-1",dtype=object)
+	books = pd.read_csv('data\\product_new.csv', error_bad_lines=False, encoding="latin-1",dtype=object)
 	# books.columns = ['ISBN', 'bookTitle', 'bookAuthor', 'yearOfPublication', 'publisher']
 	books.columns = ["ISBN","id_category","bookTitle"]
-	users = pd.read_csv('data\\users_new.csv', sep=';', error_bad_lines=False, encoding="latin-1")
+	print("books")
+	users = pd.read_csv('data\\users_new.csv', error_bad_lines=False, encoding="latin-1")
 	users.columns = ["userID","name","password","date_of_birth","gender"]
-	ratings = pd.read_csv('data\\ratings.csv', sep=';', error_bad_lines=False, encoding="latin-1",dtype=object)
-	ratings.columns = ["id","userID","ISBN","bookRating","content","deleted","created_at","updated_at"]
-
+	# users.columns = ["userID","name","date_of_birth","gender"]
+	print("users")
+	ratings = pd.read_csv('data\\ratings_new.csv', error_bad_lines=False, encoding="latin-1",dtype=object)
+	print("ratings")
+	print(ratings)
+	ratings.columns = ["id","userID","ISBN","bookRating"]
 	#checking shapes of the datasets
 	print(books.shape)
 	print(users.shape)
@@ -78,7 +83,7 @@ def recommend(user_id):
 
 	#plotting count of bookRating
 	sns.countplot(data=ratings_explicit , x='bookRating')
-	plt.show()
+	# plt.show()
 
 	#A simple popularity based recommendation system based on count of user ratings for different books
 	def new_user_recommendation():
