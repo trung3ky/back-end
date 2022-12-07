@@ -67,6 +67,23 @@ module.exports = function (app) {
 		});
 	});
 
+	//check đã rating hay chưa
+	app.get("/rate/check_rating/user/:user_id/product/:product_id", function (req, res) {
+		const user_id = req.params["user_id"];
+		const product_id = req.params["product_id"];
+		var sql = `select * from ratings where userId = ${Number(user_id)} AND productId = ${Number(product_id)}`;
+		connection.query(sql, function (err, result) {
+			if (err) {
+				throw err;
+			}
+			if (result.length > 0) {
+				res.send({ check: true });
+			} else {
+				res.send({ check: false });
+			}
+		});
+	});
+
 	app.get("/rate/product/:product_id", function (req, res) {
 		const productId = req.params["product_id"];
 		var sql = "select * from ratings where productid = '" + productId + "'";
