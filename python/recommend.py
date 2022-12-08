@@ -28,24 +28,17 @@ import seaborn as sns
 from csv import reader, writer
 
 def recommend(user_id):
-	print("running")
-
 	books = pd.read_csv('data\\product_new.csv', error_bad_lines=False, encoding="latin-1",dtype=object)
-	# books.columns = ['ISBN', 'bookTitle', 'bookAuthor', 'yearOfPublication', 'publisher']
 	books.columns = ["ISBN","id_category","bookTitle"]
-	print("books")
 	users = pd.read_csv('data\\users_new.csv', error_bad_lines=False, encoding="latin-1")
 	users.columns = ["userID","name","password","date_of_birth","gender"]
-	# users.columns = ["userID","name","date_of_birth","gender"]
-	print("users")
 	ratings = pd.read_csv('data\\ratings_new.csv', error_bad_lines=False, encoding="latin-1",dtype=object)
-	print("ratings")
-	print(ratings)
 	ratings.columns = ["id","userID","ISBN","bookRating"]
+
 	#checking shapes of the datasets
-	print(books.shape)
-	print(users.shape)
-	print(ratings.shape)
+	# print(books.shape)
+	# print(users.shape)
+	# print(ratings.shape)
 
 	books.head()
 
@@ -60,16 +53,16 @@ def recommend(user_id):
 
 	#resetting the dtype as int32
 	# books.yearOfPublication = books.yearOfPublication.astype(np.int32)
-	print(books.dtypes)
+	# print(books.dtypes)
 
-	print(users.shape)
+	# print(users.shape)
 	users.head()
 
 	users.dtypes
 
 	ratings.userID=ratings.userID.astype(np.int64)
 	ratings.bookRating=ratings.bookRating.astype(np.int64)
-	print(ratings.dtypes)
+	# print(ratings.dtypes)
 	ratings.head(5)
 	
 	ratings_new = ratings[ratings.ISBN.isin(books.ISBN)]
@@ -88,8 +81,8 @@ def recommend(user_id):
 	#A simple popularity based recommendation system based on count of user ratings for different books
 	def new_user_recommendation():
 	    ratings_count = pd.DataFrame(ratings_explicit.groupby(['ISBN'])['bookRating'].sum())
-	    top10 = ratings_count.sort_values('bookRating', ascending = False).head(3)
-	    print("Following books are recommended")
+	    top10 = ratings_count.sort_values('bookRating', ascending = False).head(5)
+	    # print("Following books are recommended")
 	    top=top10.merge(books, left_index = True, right_on = 'ISBN')
 	    return top
 
@@ -110,7 +103,7 @@ def recommend(user_id):
 	ratings_matrix = ratings_explicit.pivot(index='userID', columns='ISBN', values='bookRating')
 	userID = ratings_matrix.index
 	ISBN = ratings_matrix.columns
-	print(ratings_matrix.shape)
+	# print(ratings_matrix.shape)
 	ratings_matrix.head()
 
 	#since NaNs cannot be handled by training algorithms, replacing these by 0, which indicates absence of ratings
@@ -121,7 +114,7 @@ def recommend(user_id):
 
 	#setting global variables
 	global metric,k
-	k=3
+	k=5
 	metric='cosine'
 
 	#This function finds k similar users given the user_id and ratings matrix 
@@ -168,16 +161,16 @@ def recommend(user_id):
 	    elif prediction >10:
 	        prediction = 10
 	    
-	    print('\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction))
+	    # print('\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction))
 
 	    return prediction
 
 
-	print(books.dtypes)
-	print()
-	print(ratings.dtypes)
-	print()
-	print(users.dtypes)
+	# print(books.dtypes)
+	# print()
+	# print(ratings.dtypes)
+	# print()
+	# print(users.dtypes)
 
 	def predicting_user_based_rating(uid,iid):
 		return predict_userbased(uid,iid,ratings_matrix);
@@ -232,7 +225,7 @@ def recommend(user_id):
 	    elif prediction >10:
 	        prediction = 10
 
-	    print('\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction) )     
+	    # print('\nPredicted rating for user {0} -> item {1}: {2}'.format(user_id,item_id,prediction) )     
 	    
 	    return prediction
 
@@ -279,7 +272,7 @@ def recommend(user_id):
 	                    prediction = prediction.sort_values(ascending=False)
 	                    recommended = prediction[:3]
 	#                     print("---------------------------------------------Hello------------------------------" )
-	                    print("As per  approach....Following books are recommended...")
+	                    # print("As per  approach....Following books are recommended...")
 	#                     print(recommended,recommended.dtypes)
 	#                     print("---------------------------------------------Hello------------------------------" )
 	#                     print(recommended.index[1],"len-",len(recommended))
@@ -341,7 +334,6 @@ def recommend(user_id):
 	userID=user_id
 	# userID=21
 	str1=[]
-	str2=[]
 	chk=1
 	recomendi=''
 	if (userID not in ratings.userID.values) or type(userID) is not int:
@@ -349,11 +341,11 @@ def recommend(user_id):
 	    str12=str12.astype(int)
 	    chk=0
 	    for i in range(len(str12)):
-	        print(books.ISBN[str12[i]])
+	        # print(books.ISBN[str12[i]])
 	        recomendi=recomendi+books.ISBN[str12[i]]+','
 	    words1=recomendi.split(",")
 	    str1=words1
-	    print(words1)
+	    # print(words1)
 	    
 	else:
 	    
@@ -361,7 +353,6 @@ def recommend(user_id):
 #===============================================================================================
 	loyal=0
 	print(str1)
-	print(str2)
 	
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

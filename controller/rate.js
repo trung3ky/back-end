@@ -7,51 +7,26 @@ const { spawn } = require("child_process");
 const { PythonShell } = require("python-shell");
 const fastcsv = require("fast-csv");
 const fs = require("fs");
-const ws = fs.createWriteStream("data/ratings_new.csv");
 
-// let option = {
-//     // scriptPath: 'E:/pyshell',
-//     args: ['trung', 22]
-// }
+const handleWriteFileRating = () => {
+	const ws = fs.createWriteStream("data/ratings_new.csv");
+	var sql = `select id,userId,productId,rating from ratings`;
+
+	connection.query(sql, function (err, result) {
+		if (err) {
+			throw err;
+		}
+		console.log('vo')
+		fastcsv
+			.write(result, { headers: true })
+			.on("finish", function () {
+				console.log("Write to Rating CSV successfully!");
+			})
+			.pipe(ws);
+	});
+}
 
 module.exports = function (app) {
-	app.get("/rate", function (req, res, next) {
-		// PythonShell.run('python\\recommend.py', option, (err, res) => {
-		//     if(err) console.log(err)
-		//     if(res) console.log(res)
-		// })
-		var sql = `select id,userId,productId,rating from ratings`;
-
-		connection.query(sql, function (err, result) {
-			if (err) {
-				throw err;
-			}
-			// fs.createReadStream("data/ratings_new.csv")
-			// 	.pipe(fastcsv.parse(options))
-			// 	.write(result, { headers: true })
-			// 	.on("error", error => {
-			// 		console.log(error);
-			// 	})
-			// 	.on("data", row => {
-			// 		console.log(row);
-			// 		// fastcsv.write(result, { headers: true });
-			// 	})
-			// 	.on("end", rowCount => {
-			// 		console.log(rowCount);
-			// 	});
-			// let newResult = JSON.stringify(result);
-			// console.log(newResult);
-			fastcsv
-				.write(result, { headers: true })
-				.on("finish", function () {
-					console.log("Write to Rating CSV successfully!");
-				})
-				.pipe(ws);
-			// 	// res.send(result);
-		});
-		// res.send(result);
-	});
-
 	app.get("/rate/:rate_id", function (req, res) {
 		const rateId = req.params["rate_id"];
 		var sql = "select * from ratings where id = '" + rateId + "'";
@@ -113,6 +88,7 @@ module.exports = function (app) {
 			if (err) {
 				res.json({ type: "Create error", message: err.message });
 			} else {
+				handleWriteFileRating();
 				res.json({ type: "Create success" });
 			}
 		});

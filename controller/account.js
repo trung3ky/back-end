@@ -6,7 +6,23 @@ const uuid = require("uuid");
 var TimeNow = require("./atom");
 const fastcsv = require("fast-csv");
 const fs = require("fs");
-const ws = fs.createWriteStream("data/users_new.csv");
+
+const handleWriteFileUser = () => {
+	const ws = fs.createWriteStream("data/users_new.csv");
+	let sql = `select id,name,password,date_of_birth,gender from users `;
+
+	connection.query(sql, function (err, result) {
+		if (err) {
+			throw err;
+		}
+		fastcsv
+			.write(result, { headers: true })
+			.on("finish", function () {
+				console.log("Write to Rating CSV successfully!");
+			})
+			.pipe(ws);
+	});
+}
 
 module.exports = function (app) {
 	app.post("/login", urlencodeParser, function (req, res) {
@@ -51,6 +67,7 @@ module.exports = function (app) {
 						throw err;
 					}
 					if (result.length > 0) {
+						handleWriteFileUser();
 						res.send(...result);
 					} else {
 						res.send({ message: "not found" });
@@ -63,25 +80,6 @@ module.exports = function (app) {
 					message: "Email exits",
 				});
 			}
-		});
-	});
-
-	app.get("/user", function (req, res, next) {
-		// const max_results = req.query.max_results ?? 25;
-		// let sql = `select * from users limit ${max_results}`;
-		let sql = `select id,name,password,date_of_birth,gender from users `;
-
-		connection.query(sql, function (err, result) {
-			if (err) {
-				throw err;
-			}
-			fastcsv
-				.write(result, { headers: true })
-				.on("finish", function () {
-					console.log("Write to Rating CSV successfully!");
-				})
-				.pipe(ws);
-			// res.send(result);
 		});
 	});
 

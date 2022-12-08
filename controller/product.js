@@ -6,40 +6,34 @@ var TimeNow = require("./atom");
 const uuid = require("uuid");
 const fastcsv = require("fast-csv");
 const fs = require("fs");
-const ws = fs.createWriteStream("data/product_new.csv");
+
+const handleWriteFileProduct = () => {
+	const ws = fs.createWriteStream("data/product_new.csv");
+	var sql = `select id,id_category,product_name from product_new`;
+	connection.query(sql, function (err, result) {
+		if (err) {
+			throw err;
+		}
+		fastcsv
+			.write(result, { headers: true })
+			.on("finish", function () {
+				console.log("Write to Rating CSV successfully!");
+			})
+			.pipe(ws);
+	});
+}
+
 
 module.exports = function (app) {
 	app.get("/product", function (req, res, next) {
-		// const max_results = req.query.max_results ?? 25;
-		// var sql = `select * from product_new limit ${max_results}`;
-		var sql = `select * from product_new`;
+		const max_results = req.query.max_results ?? 25;
+		var sql = `select * from product_new limit ${max_results}`;
 
 		connection.query(sql, function (err, result) {
 			if (err) {
 				throw err;
 			}
-			// fastcsv
-			// 	.write(result, { headers: true })
-			// 	.on("finish", function () {
-			// 		console.log("Write to Rating CSV successfully!");
-			// 	})
-			// 	.pipe(ws);
 			res.send(result);
-		});
-	});
-	// Route for generating recommend
-	app.get("/product-recommend", function (req, res, next) {
-		var sql = `select id,id_category,product_name from product_new`;
-		connection.query(sql, function (err, result) {
-			if (err) {
-				throw err;
-			}
-			fastcsv
-				.write(result, { headers: true })
-				.on("finish", function () {
-					console.log("Write to Rating CSV successfully!");
-				})
-				.pipe(ws);
 		});
 	});
 
@@ -75,6 +69,7 @@ module.exports = function (app) {
 			if (err) {
 				res.json({ type: "Create error", message: err.message });
 			} else {
+				handleWriteFileProduct();
 				res.json({ type: "Create success" });
 			}
 		});
