@@ -59,21 +59,40 @@ module.exports = function (app) {
 		});
 	});
 
-	app.get("/rate/product/:product_id", function (req, res) {
-		const productId = req.params["product_id"];
-		var sql = "select * from ratings where productid = '" + productId + "'";
-		connection.query(sql, function (err, result) {
-			if (err) {
-				throw err;
-			}
-			if (result.length > 0) {
-				res.send(result);
-			} else {
-				res.send({ message: "not found" });
-			}
-		});
-	});
+	// app.get("/rate/product/:product_id", function (req, res) {
+	// 	const productId = req.params["product_id"];
+	// 	var sql = "select * from ratings where productid = '" + productId + "',select AVG(rating) AS averageRating,COUNT(id) AS customerRating from ratings where productid = '" + productId + "'";
+	// 	// var objectR = {}
+	// 	connection.query(sql, function (err, result) {
+	// 		if (err) {
+	// 			throw err;
+	// 		}
+	// 		if (result.length > 0) {
+	// 			console.log("result",result)
+	// 			// objectR.
+	// 			res.send(result);
+	// 		} else {
+	// 			res.send({ message: "not found" });
+	// 		}
+	// 	});
+	
+	// });
 
+	app.get("/rate/product/:product_id", (req, res) => {
+		const productId = req.params["product_id"];
+		const sql1 = `SELECT * FROM ratings WHERE productid = '${productId}'`;
+		const sql2 = "select AVG(rating) AS averageRating,COUNT(id) AS customerRating from ratings where productid = '" + productId + "'";
+		connection.query(sql1, function (error, ratings) {
+		if (error) throw error;
+		if (ratings.length > 0) {
+			connection.query(sql2, function (error, results) {
+				if (error) throw error;
+				console.log(results,ratings);
+				res.send({...results[0],ratings});
+			})
+		}
+		});
+	})
 	// command api
 	app.post("/rate/create_rate", urlencodeParser, function (req, res) {
 		const userId = req.body.userId ?? null;

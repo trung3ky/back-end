@@ -21,8 +21,7 @@ const handleWriteFileProduct = () => {
 			})
 			.pipe(ws);
 	});
-}
-
+};
 
 module.exports = function (app) {
 	app.get("/product", function (req, res, next) {
@@ -32,6 +31,7 @@ module.exports = function (app) {
 		connection.query(sql, function (err, result) {
 			if (err) {
 				throw err;
+				console.log("🚀 ~ file: product.js:37 ~ console");
 			}
 			res.send(result);
 		});
