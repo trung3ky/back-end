@@ -21,6 +21,7 @@ var rateController = require("./controller/rate");
 var recommendController = require("./controller/recommend");
 var categoryController = require("./controller/category");
 var cartController = require("./controller/cart");
+var paypalController = require("./controller/paypal");
 
 accountController(app);
 productController(app);
@@ -28,6 +29,7 @@ rateController(app);
 recommendController(app);
 categoryController(app);
 cartController(app);
+paypalController(app);
 // siginController(app);
 // chat(app);
 
