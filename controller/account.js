@@ -60,8 +60,8 @@ module.exports = function (app) {
 		connection.query(checkEmail, function (err, result) {
 			console.log(result);
 			if (result.length === 0) {
-				var sql = `insert into users(name, password, date_of_birth, gender, avatar, description, email, delete_at, address, created_at, updated_at) 
-                values('${name}', '${password}', null, '${gender}', null, null, '${username}', 0, null, '${TimeNow()}', '${TimeNow()}')`;
+				var sql = `insert into users(name, password, date_of_birth, gender, avatar, description, email, delete_at, created_at, updated_at) 
+                values('${name}', '${password}', null, '${gender}', null, null, '${username}', 0, '${TimeNow()}', '${TimeNow()}')`;
 				connection.query(sql, function (err, result) {
 					if (err) {
 						throw err;
@@ -86,11 +86,16 @@ module.exports = function (app) {
 	app.get("/user/:user_id", function (req, res) {
 		const userId = req.params["user_id"];
 		var sql = "select * from users where id = '" + userId + "' ";
-		connection.query(sql, function (err, result) {
-			if (err) {
-				throw err;
-			}
-			res.send(...result);
+		var sqlCheckAdress = "select * from address where user_id = '" + userId + "' ";
+		connection.query(sqlCheckAdress, function (err, resultCheck) {
+			if (err) throw err;
+			connection.query(sql, function (err, result) {
+				if (err) throw err;
+				res.send({
+					...result[0],
+					address: resultCheck.length > 0 ? true : false
+				});
+			});
 		});
 	});
 };

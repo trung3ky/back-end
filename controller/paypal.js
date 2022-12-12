@@ -1,81 +1,82 @@
 var bodyParser = require("body-parser");
 var connection = require("./db");
-paypal.configure({
-  // Email:
-'mode': 'sandbox', //sandbox or live
-'client_id': 'AV8Vzu-uma1N4GYtbOxYD_Bdn8WWIAlHnTwBrCabY47OVj9Mj8uY9PgJ6NdXf4khGB-6-H72y-3Alx4M',
-'client_secret': 'EKeXEifReBhhOIJ9UGgOeNpw4RmOCDiWSsRFKD2_xv1aAXiwmwgJeBlmYhrM_IO2fUWcy-GHtHMc-ZIM'
-});
+// paypal.configure({
+//   // Email:
+// 'mode': 'sandbox', //sandbox or live
+// 'client_id': 'AV8Vzu-uma1N4GYtbOxYD_Bdn8WWIAlHnTwBrCabY47OVj9Mj8uY9PgJ6NdXf4khGB-6-H72y-3Alx4M',
+// 'client_secret': 'EKeXEifReBhhOIJ9UGgOeNpw4RmOCDiWSsRFKD2_xv1aAXiwmwgJeBlmYhrM_IO2fUWcy-GHtHMc-ZIM'
+// });
 
 module.exports = function (app) {
-app.post('/pay', (req, res) => {
-  //   const create_payment_json = {
-  //     "intent": "sale",
-  //     "payer": {
-  //         "payment_method": "paypal"
-  //     },
-  //     "redirect_urls": {
-  //         "return_url": "http://localhost:8000/success",
-  //         "cancel_url": "http://localhost:8000/cancel"
-  //     },
-  //     "transactions": [{
-  //         "item_list": {
-  //             "items": [{
-  //                 "name": "Red Sox Hat",
-  //                 "sku": "001",
-  //                 "price": "25.00",
-  //                 "currency": "USD",
-  //                 "quantity": 1
-  //             }]
-  //         },
-  //         "amount": {
-  //             "currency": "USD",
-  //             "total": "25.00"
-  //         },
-  //         "description": "Hat for the best team ever"
-  //     }]
-  // };
+// app.post('/pay', (req, res) => {
+//   //   const create_payment_json = {
+//   //     "intent": "sale",
+//   //     "payer": {
+//   //         "payment_method": "paypal"
+//   //     },
+//   //     "redirect_urls": {
+//   //         "return_url": "http://localhost:8000/success",
+//   //         "cancel_url": "http://localhost:8000/cancel"
+//   //     },
+//   //     "transactions": [{
+//   //         "item_list": {
+//   //             "items": [{
+//   //                 "name": "Red Sox Hat",
+//   //                 "sku": "001",
+//   //                 "price": "25.00",
+//   //                 "currency": "USD",
+//   //                 "quantity": 1
+//   //             }]
+//   //         },
+//   //         "amount": {
+//   //             "currency": "USD",
+//   //             "total": "25.00"
+//   //         },
+//   //         "description": "Hat for the best team ever"
+//   //     }]
+//   // };
 
-  app.get('/success', (req, res) => {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
+//   app.get('/success', (req, res) => {
+//     const payerId = req.query.PayerID;
+//     const paymentId = req.query.paymentId;
   
-    const execute_payment_json = {
-      "payer_id": payerId,
-      "transactions": [{
-          "amount": {
-              "currency": "USD",
-              "total": "25.00"
-          }
-      }]
-    };
+//     const execute_payment_json = {
+//       "payer_id": payerId,
+//       "transactions": [{
+//           "amount": {
+//               "currency": "USD",
+//               "total": "25.00"
+//           }
+//       }]
+//     };
   
-    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-      if (error) {
-          console.log(error.response);
-          throw error;
-      } else {
-          console.log(JSON.stringify(payment));
-          res.send('Success');
-      }
-  });
-  });
+//     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+//       if (error) {
+//           console.log(error.response);
+//           throw error;
+//       } else {
+//           console.log(JSON.stringify(payment));
+//           res.send('Success');
+//       }
+//   });
+//   });
 
-    paypal.payment.create(create_payment_json, function (error, payment) {
-        if (error) {
-            throw error;
-        } else {
-            for(let i = 0;i < payment.links.length;i++){
-              if(payment.links[i].rel === 'approval_url'){
-                res.redirect(payment.links[i].href);
-              }
-            }
-        }
-      });
+//     paypal.payment.create(create_payment_json, function (error, payment) {
+//         if (error) {
+//             throw error;
+//         } else {
+//             for(let i = 0;i < payment.links.length;i++){
+//               if(payment.links[i].rel === 'approval_url'){
+//                 res.redirect(payment.links[i].href);
+//               }
+//             }
+//         }
+//       });
       
-      });
+//       });
 
-  app.get('/cancel', (req, res) => {
-    console.log('cancelling');
-    res.send('Cancelled')
-});};
+//   app.get('/cancel', (req, res) => {
+//     console.log('cancelling');
+//     res.send('Cancelled')
+// });
+};
