@@ -87,7 +87,6 @@ module.exports = function (app) {
 		if (ratings.length > 0) {
 			connection.query(sql2, function (error, results) {
 				if (error) throw error;
-				console.log(results,ratings);
 				res.send({...results[0],ratings});
 			})
 		}

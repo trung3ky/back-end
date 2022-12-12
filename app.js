@@ -1,12 +1,12 @@
 var express = require("express");
 const bodyParser = require("body-parser");
 var app = express();
-const cors = require("cors");  
+const cors = require("cors");
 var server = require("http").createServer(app);
 
 app.use("/assets", express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.set('view engine', 'pug')
 // parse application/json
 app.use(bodyParser.json());
 app.use(cors());
@@ -21,6 +21,7 @@ var recommendController = require("./controller/recommend");
 var categoryController = require("./controller/category");
 var cartController = require("./controller/cart");
 var paypalController = require("./controller/paypal");
+var addressController = require("./controller/address");
 
 accountController(app);
 productController(app);
@@ -29,6 +30,7 @@ recommendController(app);
 categoryController(app);
 cartController(app);
 paypalController(app);
+addressController(app);
 // siginController(app);
 // chat(app);
 
