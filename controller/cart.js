@@ -29,7 +29,7 @@ module.exports = function(app) {
         const productId = req.body.productId;
         const quanlity = req.body.quanlity;
 
-		var sql = `insert into cart(user_id, product_id, quanlity, created, updated_at) 
+		var sql = `insert into cart(user_id, product_id, quanlity, created_at, updated_at) 
         values('${userId}', '${productId}', ${quanlity}, '${TimeNow()}', '${TimeNow()}')`;
 
 		connection.query(sql, function (err, result) {

@@ -1,8 +1,7 @@
 var express = require("express");
 const bodyParser = require("body-parser");
 var app = express();
-const cors = require("cors");
-
+const cors = require("cors");  
 var server = require("http").createServer(app);
 
 app.use("/assets", express.static(__dirname + "/public"));
@@ -21,7 +20,7 @@ var rateController = require("./controller/rate");
 var recommendController = require("./controller/recommend");
 var categoryController = require("./controller/category");
 var cartController = require("./controller/cart");
-// var paypalController = require("./controller/paypal");
+var paypalController = require("./controller/paypal");
 
 accountController(app);
 productController(app);
@@ -29,7 +28,7 @@ rateController(app);
 recommendController(app);
 categoryController(app);
 cartController(app);
-// paypalController(app);
+paypalController(app);
 // siginController(app);
 // chat(app);
 
