@@ -96,4 +96,29 @@ module.exports = function (app) {
             }
         });
     });
+
+    app.get("/cart/cart-list/:list_id/user/:user_id", urlencodeParser, function (req, res) {
+        const list_id = req.params["list_id"];
+        const user_id = req.params["user_id"];
+
+        const sql = `select c.*, p.product_name, p.product_image, p.product_image, p.product_price, p.product_quanlity, g.display_category, s.id as 'shop_id', s.shop_name, s.shop_avatar
+        from cart c
+        LEFT JOIN product_new p
+        ON c.product_id = p.id 
+        LEFT JOIN categories g
+        ON p.id_category = g.id 
+        LEFT JOIN shop s
+        ON p.id_shop = s.id
+        Where user_id = ${user_id} and product_id IN (${JSON.parse(list_id)})`
+        connection.query(sql, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send([])
+            }
+        });
+    });
 }
