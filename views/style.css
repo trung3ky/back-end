@@ -80,26 +80,9 @@ th {
 .table-footer {
   background: #fcbd024f;
 }
-.button-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-.btn {
-  padding:8px 12px;
-  border-radius: 3px;
-  outline: none;
-  border:none;
-  color:#fff;
-  background-color: #0163D2;
-  cursor: pointer;
-}
-
+ 
 @media print {
   .main-pd-wrapper {
     page-break-before: always;
-  }
-  .btn {
-    display: none;
   }
 }

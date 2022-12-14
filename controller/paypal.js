@@ -1,10 +1,12 @@
 const bodyParser = require("body-parser");
-var connection = require("./db");
-var mysql = require('mysql');
+const connection = require("./db");
+const mysql = require('mysql');
 const urlencodeParser = bodyParser.urlencoded({ extended: false });
 require('dotenv').config()
 const paypal = require('paypal-rest-sdk');
-const { response } = require("express");
+const nodemailer = require("nodemailer");
+const pug = require('pug');
+const fs = require('fs');
 
 module.exports = function (app) {
   paypal.configure({
@@ -73,12 +75,9 @@ module.exports = function (app) {
             console.log(error.response);
             throw error;
           } else {
-            console.log(payment);
-            // console.log("payment123", payment)
-            // res.send('Success'); 
-            // console.log("dataPrint", dataPrint)
-            // res.render('index', { ...dataPrint })
+            // console.log(payment); 
             res.render('index', { data: payment })
+            sendMail(payment);
           }
         });
       });
@@ -103,7 +102,34 @@ module.exports = function (app) {
       // res.send('Cancelled')
       res.redirect("http://localhost:3006/cart")
     });
-  });
+    function sendMail(data) {
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: true,
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+          user: "nvantien222@gmail.com", // generated ethereal user
+          pass: "k j i c t g l j e u b p d i z k", // get from app password google
+        },
+      });
 
-
+      // send mail with defined transport object   
+      let mailOptions = {
+        from: "nvantien222@gmail.com", // sender address
+        to: "16.vantien@gmail.com", // list of receivers
+        subject: "Invoice", // Subject line 
+        html: pug.renderFile('D:/React Practice/back-end/views/index.pug', { data }), // html body
+      };
+      transporter.sendMail(mailOptions, function (error, info) {
+        // Preview only available when sending through an Ethereal account
+        // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+  })
 }
