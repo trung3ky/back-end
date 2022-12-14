@@ -7,6 +7,7 @@ var server = require("http").createServer(app);
 app.use("/assets", express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'pug')
+app.use(express.static('public'))
 // parse application/json
 app.use(bodyParser.json());
 app.use(cors());

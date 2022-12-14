@@ -1,9 +1,64 @@
 doctype html
-html(lang="en")
-  head
-    title= title 
-    h1= message
-  body
-    h1 Pug - node template engine
-   
-      
+head
+  meta(charset='utf-8')
+  title Invoice 
+  style
+      include style.css    
+section.main-pd-wrapper
+  .infor-shop
+    div.logo
+      img(src='/images/logo.png' alt='logo')
+    p.shop-name
+    - console.log("test",data.transactions[0].item_list.items);
+    p.shop-name
+      | Bill Of Supply VENAM. Retailers
+    p.shop-address
+      |  #{data.transactions[0].item_list.shipping_address.line1}
+      br
+      |                   #{data.transactions[0].item_list.shipping_address.city} #{data.transactions[0].item_list.shipping_address.postal_code} #{data.transactions[0].item_list.shipping_address.country_code}
+    p
+      b Payment-Id:
+      |  #{data.id}
+    p
+      b Payment-Method:
+      |  #{data.payer.payment_method}
+    p
+      b Email Customer:
+      |  #{data.payer.payer_info.email}
+    p
+      b Recipient Name:
+      |  #{data.transactions[0].item_list.shipping_address.recipient_name}
+    p
+      b Pay Id:
+      |  #{data.payer.payer_info.payer_id}
+    p
+      b Cart:
+      |  #{data.cart} 
+    p
+      b Time:
+      |  #{new Date(data.create_time).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })}
+  table.table-wrap
+    thead
+      tr
+        th.column-id Id
+        th.column-name Item Name
+        th QTY
+        th.column-price Price
+    tbody
+      each val, index in data.transactions[0].item_list.items
+        tr.invoice-items
+          td #{index + 1}
+          td #{val.name}
+          td #{val.quantity}
+          td.text-right &#36; #{val.price}
+    tfoot.table-footer
+      tr
+        th.text-center Total
+        th
+        th
+        th.text-right &#36; #{data.transactions[0].amount.total}
+  .button-controls 
+    button#btn-back.btn(onclick='history.back();')
+     | Back
+    button#btn-print.btn(onclick='window.print();')
+     | Print

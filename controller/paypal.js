@@ -4,6 +4,7 @@ var mysql = require('mysql');
 const urlencodeParser = bodyParser.urlencoded({ extended: false });
 require('dotenv').config()
 const paypal = require('paypal-rest-sdk');
+const { response } = require("express");
 
 module.exports = function (app) {
   paypal.configure({
@@ -13,16 +14,17 @@ module.exports = function (app) {
     'client_secret': process.env.CLIENT_SECRET,
   });
   app.post('/pay', urlencodeParser, (req, res) => {
-    console.log("req.body", req.body);
+    let dataPrint = {}
     let { userId, totalPrice, listIdSelect } = req.body;
     let dataId = []
+
     listIdSelect.map(item => dataId.push(item));
-    const sql = mysql.format(`select quanlity,product_new.product_image,product_new.product_name,product_new.product_price from cart JOIN product_new ON cart.product_id = product_new.id where user_id = "${userId}" AND product_id IN (?)`, [dataId]);
+    const sql = mysql.format(`select quanlity,product_new.product_image,product_new.product_name,product_new.product_price,users.name,users.email from cart JOIN product_new ON cart.product_id = product_new.id INNER JOIN users ON users.id = cart.user_id where user_id = "${userId}" AND product_id IN (?)`, [dataId]);
     connection.query(sql, function (err, result) {
       if (err) throw err;
-      console.log(result);
       let newR = result.map(item => {
-        let { product_name, product_price, quanlity } = item;
+        dataPrint = item;
+        let { product_name, product_price, quanlity, name, email } = item;
         return {
           "name": `${product_name}`,
           "sku": "001",
@@ -71,9 +73,12 @@ module.exports = function (app) {
             console.log(error.response);
             throw error;
           } else {
-            console.log(JSON.stringify(payment));
+            console.log(payment);
+            // console.log("payment123", payment)
             // res.send('Success'); 
-            res.render('index', { title: 'Hey', message: 'Hello there!' })
+            // console.log("dataPrint", dataPrint)
+            // res.render('index', { ...dataPrint })
+            res.render('index', { data: payment })
           }
         });
       });
@@ -95,7 +100,8 @@ module.exports = function (app) {
 
     app.get('/cancel', (req, res) => {
       console.log('cancelling');
-      res.send('Cancelled')
+      // res.send('Cancelled')
+      res.redirect("http://localhost:3006/cart")
     });
   });
 

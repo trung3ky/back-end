@@ -1,0 +1,105 @@
+* {
+  box-sizing: border-box;
+} 
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}  
+table { 
+  width: 100%;
+  border-collapse: collapse;
+  padding: 1px;
+} 
+td,
+th {
+  text-align: left;
+  padding: 8px 6px;
+}  
+.main-pd-wrapper {
+  width: 450px;
+  margin: auto;
+  box-shadow: 0 0 10px #ddd;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+}
+.infor-shop {
+  text-align: left;
+  margin: auto;
+  line-height: 1.5;
+  font-size: 14px;
+  color: #4a4a4a;
+  border-bottom: 1px dashed rgb(131, 131, 131);
+  padding-bottom: 25px;
+}
+.logo {
+  text-align: center;
+}
+.shop-name {
+  font-weight: bold;
+  color: #000;
+  margin-top: 15px;
+  font-size: 18px;
+  text-align: center;
+}
+.shop-address {
+  margin: 15px auto;
+  text-align: center;
+}
+.table-wrap {
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 25px;
+
+}
+.column-id{
+  width: 50px;
+  padding-left: 0;
+}
+.column-name {
+  width: 220px;
+}
+.column-price {
+  text-align: right;
+  padding-right: 0;
+} 
+.invoice-items { 
+  border-top: 1px dotted #ddd;
+}
+.invoice-items td{
+  padding: 14px 0;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+.table-footer {
+  background: #fcbd024f;
+}
+.button-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.btn {
+  padding:8px 12px;
+  border-radius: 3px;
+  outline: none;
+  border:none;
+  color:#fff;
+  background-color: #0163D2;
+  cursor: pointer;
+}
+
+@media print {
+  .main-pd-wrapper {
+    page-break-before: always;
+  }
+  .btn {
+    display: none;
+  }
+}
