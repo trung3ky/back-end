@@ -9,8 +9,6 @@ section.main-pd-wrapper
     div.logo
       img(src='https://scontent.xx.fbcdn.net/v/t1.15752-9/264564202_1542887116093646_8581694092638164552_n.png?_nc_cat=111&ccb=1-7&_nc_sid=aee45a&_nc_ohc=wUd9S84yNloAX_2eJJ0&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdT_NNWRoYM6N6L7_5ogYRVv6-p9yRF69tvAZQebJWOv_g&oe=63C15951' alt='logo')
     p.shop-name
-    - console.log("test",data.transactions[0].item_list.items);
-    p.shop-name
       | Bill Of Supply VENAM. Retailers
     p.shop-address
       |  #{data.transactions[0].item_list.shipping_address.line1}
@@ -24,7 +22,10 @@ section.main-pd-wrapper
       |  #{data.payer.payment_method}
     p
       b Email Customer:
-      |  #{data.payer.payer_info.email}
+      |  #{data.email}
+    p
+      b Address Receive:
+      |  #{data.fullAdress}
     p
       b Recipient Name:
       |  #{data.transactions[0].item_list.shipping_address.recipient_name}

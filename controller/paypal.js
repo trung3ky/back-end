@@ -17,16 +17,22 @@ module.exports = function (app) {
   });
   app.post('/pay', urlencodeParser, (req, res) => {
     let dataPrint = {}
-    let { userId, totalPrice, listIdSelect } = req.body;
+    // let { userId, totalPrice, listIdSelect } = req.body;
+    let { userId, total, listId, address } = req.body;
+    // let fullAdress = `${address.address} - ${address.city_name} - ${address.district_name} - ${address.ward_name}`;
+    let fullAdress = `${address.address} - ${address.ward_name} - ${address.district_name} - ${address.city_name}`;
+    let emailUser;
     let dataId = []
 
-    listIdSelect.map(item => dataId.push(item));
+    listId.map(item => dataId.push(item));
     const sql = mysql.format(`select quanlity,product_new.product_image,product_new.product_name,product_new.product_price,users.name,users.email from cart JOIN product_new ON cart.product_id = product_new.id INNER JOIN users ON users.id = cart.user_id where user_id = "${userId}" AND product_id IN (?)`, [dataId]);
     connection.query(sql, function (err, result) {
       if (err) throw err;
       let newR = result.map(item => {
         dataPrint = item;
         let { product_name, product_price, quanlity, name, email } = item;
+        console.log("email: " + email)
+        emailUser = email;
         return {
           "name": `${product_name}`,
           "sku": "001",
@@ -38,7 +44,18 @@ module.exports = function (app) {
       const create_payment_json = {
         "intent": "sale",
         "payer": {
-          "payment_method": "paypal"
+          "payment_method": "paypal",
+          "payer_info": {
+            "shipping_address": {
+              "recipient_name": "Tien Nguyen",
+              "line1": "1St",
+              "city": "San Jose",
+              "state": "CA",
+              "postal_code": "95131",
+              "country_code": "US"
+            },
+            "country_code": "US"
+          }
         },
         "redirect_urls": {
           "return_url": "http://localhost:8000/success",
@@ -50,7 +67,7 @@ module.exports = function (app) {
           },
           "amount": {
             "currency": "USD",
-            "total": totalPrice,
+            "total": total,
           },
           "description": "Hat for the best team ever"
         }]
@@ -65,7 +82,7 @@ module.exports = function (app) {
           "transactions": [{
             "amount": {
               "currency": "USD",
-              "total": totalPrice
+              "total": total
             }
           }]
         };
@@ -75,7 +92,9 @@ module.exports = function (app) {
             console.log(error.response);
             throw error;
           } else {
-            // console.log(payment); 
+            payment.fullAdress = fullAdress;
+            payment.email = emailUser;
+            console.log(payment);
             res.render('index', { data: payment })
             sendMail(payment);
           }

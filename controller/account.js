@@ -38,15 +38,24 @@ module.exports = function (app) {
 			if (err) {
 				throw err;
 			}
-			if (result.length > 0) {
-				res.send(...result);
-			} else {
-				res.send({
-					code: "404",
-					type: "login failed",
-					message: "Email and password wrong",
-				});
-			}
+			var sqlCheckAdress = "select * from address where user_id = '" + result[0].id + "' ";
+			connection.query(sqlCheckAdress, function (err, resultCheck) {
+				if (err) throw err;
+				if (result.length > 0) {
+					res.send({
+						...result[0],
+						address: resultCheck.length > 0 ? true : false
+					});
+				} else {
+					res.send({
+						code: "404",
+						type: "login failed",
+						message: "Email and password wrong",
+					});
+				}
+			});
+
+
 		});
 	});
 
