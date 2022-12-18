@@ -124,4 +124,19 @@ module.exports = function (app) {
 			});
 		}
 	);
+
+	app.get('/product/shop/:user_id', urlencodeParser, (req, res) => {
+		const user_id = req.params["user_id"];
+		const sql = `select c.* from shop LEFT JOIN product_new c ON c.id_shop = shop.id where userId = ${user_id}`;
+		connection.query(sql, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send([])
+            }
+        });
+	})
 };
