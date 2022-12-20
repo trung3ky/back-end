@@ -10,6 +10,7 @@ const fs = require("fs");
 const request = require('request');
 const { response } = require("express");
 const axios = require('axios');
+require('dotenv').config()
 
 module.exports = function (app) {
     // API get province
@@ -17,7 +18,7 @@ module.exports = function (app) {
         axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
             {
                 headers: {
-                    Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                    Token: process.env.TOKEN_GHN,
                 }
             }
         ).then(({ data }) => res.json(data));
@@ -30,7 +31,7 @@ module.exports = function (app) {
         axios.post('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', body,
             {
                 headers: {
-                    Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                    Token: process.env.TOKEN_GHN,
                     'Content-Type': 'application/json',
                 }
             }
@@ -45,7 +46,7 @@ module.exports = function (app) {
         axios.post('https://online-gateway.ghn.vn/shiip/public-api/master-data/ward', body,
             {
                 headers: {
-                    Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                    Token: process.env.TOKEN_GHN,
                     'Content-Type': 'application/json',
                 }
             }
@@ -70,7 +71,7 @@ module.exports = function (app) {
                     },
                         {
                             headers: {
-                                Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                                Token: process.env.TOKEN_GHN,
                                 'Content-Type': 'application/json',
                             }
                         }
@@ -117,7 +118,7 @@ module.exports = function (app) {
                     await axios.post('https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee', body,
                         {
                             headers: {
-                                Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                                Token: process.env.TOKEN_GHN,
                                 'Content-Type': 'application/json',
                             }
                         }
@@ -151,7 +152,7 @@ module.exports = function (app) {
             await axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
                 {
                     headers: {
-                        Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                        Token: process.env.TOKEN_GHN,
                     }
                 }
             ).then(({ data }) =>
@@ -161,7 +162,7 @@ module.exports = function (app) {
             await axios.post('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', { province_id: Number(city) },
                 {
                     headers: {
-                        Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                        Token: process.env.TOKEN_GHN,
                         'Content-Type': 'application/json',
                     }
                 }
@@ -169,7 +170,7 @@ module.exports = function (app) {
             await axios.post('https://online-gateway.ghn.vn/shiip/public-api/master-data/ward', { district_id: Number(district) },
                 {
                     headers: {
-                        Token: "bb0e3863-7d49-11ed-9dc6-f64f768dbc22",
+                        Token: process.env.TOKEN_GHN,
                         'Content-Type': 'application/json',
                     }
                 }

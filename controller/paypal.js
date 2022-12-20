@@ -5,6 +5,7 @@ const urlencodeParser = bodyParser.urlencoded({ extended: false });
 require('dotenv').config()
 const paypal = require('paypal-rest-sdk');
 const nodemailer = require("nodemailer");
+const TimeNow = require('./atom');
 const pug = require('pug');
 const fs = require('fs');
 
@@ -16,7 +17,6 @@ module.exports = function (app) {
     'client_secret': process.env.CLIENT_SECRET,
   });
   app.post('/pay', urlencodeParser, (req, res) => {
-    let dataPrint = {}
     // let { userId, totalPrice, listIdSelect } = req.body;
     let { userId, total, listId, address } = req.body;
     // let fullAdress = `${address.address} - ${address.city_name} - ${address.district_name} - ${address.ward_name}`;
@@ -94,9 +94,19 @@ module.exports = function (app) {
           } else {
             payment.fullAdress = fullAdress;
             payment.email = emailUser;
-            console.log(payment);
-            res.render('index', { data: payment })
-            sendMail(payment);
+            var sql = `select id from cart where user_id = ${userId}`;
+            connection.query(sql, function (err, result) {
+              if (err) throw err;
+              if (result.length > 0) {
+                var sqlOrder = `INSERT INTO orders(id_cart,status_order, create_at, update_at) VALUES (${result[0].id},1,'${TimeNow()}','${TimeNow()}')`;
+                connection.query(sqlOrder, function (err, result) {
+                  if (err) throw err;
+                  res.render('index', { data: payment })
+                  sendMail(payment);
+                })
+              }
+            })
+
           }
         });
       });
@@ -119,7 +129,7 @@ module.exports = function (app) {
     app.get('/cancel', (req, res) => {
       console.log('cancelling');
       // res.send('Cancelled')
-      res.redirect("http://localhost:3006/cart")
+      res.redirect("http://localhost:3005/cart")
     });
     function sendMail(data) {
       let transporter = nodemailer.createTransport({

@@ -24,6 +24,8 @@ var categoryController = require("./controller/category");
 var cartController = require("./controller/cart");
 var paypalController = require("./controller/paypal");
 var addressController = require("./controller/address");
+var orderController = require("./controller/order");
+
 
 accountController(app);
 productController(app);
@@ -33,6 +35,7 @@ categoryController(app);
 cartController(app);
 paypalController(app);
 addressController(app);
+orderController(app);
 // siginController(app);
 // chat(app);
 
