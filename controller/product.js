@@ -140,4 +140,34 @@ module.exports = function (app) {
             }
         });
 	})
+
+	app.get('/product/category/:category_id', urlencodeParser, (req, res) => {
+		const category_id = req.params["category_id"];
+		const sql = `select * from product_new where id_category = ${category_id}`;
+		connection.query(sql, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send([])
+            }
+        });
+	})
+
+	app.get('/product/search/:search', urlencodeParser, (req, res) => {
+		const search = req.params["search"];
+		const sql = `select * from product_new where product_name LIKE '%${search}%'`;
+		connection.query(sql, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send([])
+            }
+        });
+	})
 };

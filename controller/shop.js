@@ -20,6 +20,21 @@ module.exports = function (app) {
 		});
 	});
 
+	app.get("/shop/product/:shopId", function (req, res) {
+		const userId = req.params["shopId"];
+		var sql = "select * from shop where id = '" + userId + "'";
+		connection.query(sql, function (err, result) {
+			if (err) {
+				throw err;
+			}
+			if (result.length > 0) {
+				res.send({type: 'OK', data: result[0]});
+			} else {
+				res.send({ type: 'NOTOK',  message: "not found" });
+			}
+		});
+	});
+
     app.post("/shop/create_shop/:user_id", urlencodeParser, function (req, res) {
 		const userId = req.params["user_id"];
 		const name = req.body?.shop_name ?? null;
