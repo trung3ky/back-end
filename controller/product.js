@@ -53,14 +53,13 @@ module.exports = function (app) {
 	});
 
 	app.post("/product/create_product", urlencodeParser, function (req, res) {
-		const name = req.body.name ?? null;
-		const category_id = req.body.category_id ?? null;
 		const shop_id = req.body.shop_id ?? null;
-		const image = req.body.image ?? null;
-		const description = req.body.description ?? null;
-		const quanlity = req.body.quanlity ?? null;
-		const price = req.body.price ?? null;
-		const sale = req.body.sale ?? null;
+		const name = req.body?.product_name ?? null;
+		const category_id = req.body?.id_category ?? null;
+		const image = req.body?.product_image ?? null;
+		const description = req.body?.product_description ?? null;
+		const quanlity = req.body?.product_quanlity ?? null;
+		const price = req.body?.product_price ?? null;
 
 		var sql = `insert into product_new(id_shop, id_category, product_name, product_image, product_description, product_quanlity, product_price, created_at, updated_at) 
         values(${shop_id}, ${category_id}, '${name}', '${image}', '${description}', ${quanlity}, ${price}, '${TimeNow()}', '${TimeNow()}')`;
@@ -98,16 +97,16 @@ module.exports = function (app) {
 		function (req, res) {
 			const productId = req.params["product_id"];
 
-			const name = req.body?.name ?? null;
-			const category_id = req.body?.category_id ?? null;
-			const image = req.body?.image ?? null;
-			const description = req.body?.description ?? null;
-			const quanlity = req.body?.quanlity ?? null;
-			const price = req.body?.price ?? null;
+			const name = req.body?.product_name ?? null;
+			const category_id = req.body?.id_category ?? null;
+			const image = req.body?.product_image ?? null;
+			const description = req.body?.product_description ?? null;
+			const quanlity = req.body?.product_quanlity ?? null;
+			const price = req.body?.product_price ?? null;
 
 			var sql = `UPDATE product_new
-        SET name =' ${name}',
-        category_id = ${category_id},
+        SET product_name = '${name}',
+        id_category = ${category_id},
         product_image =' ${image}',
         product_description = '${description}',
         product_quanlity = ${quanlity},
@@ -125,9 +124,11 @@ module.exports = function (app) {
 		}
 	);
 
-	app.get('/product/shop/:user_id', urlencodeParser, (req, res) => {
-		const user_id = req.params["user_id"];
-		const sql = `select c.* from shop LEFT JOIN product_new c ON c.id_shop = shop.id where userId = ${user_id}`;
+	app.get('/product/shop/:shop_id', urlencodeParser, (req, res) => {
+		const shop_id = req.params["shop_id"];
+		const sql = `select p.*, categories.display_category from product_new p
+		LEFT JOIN categories ON p.id_category = categories.id 
+		where id_shop = ${shop_id}`;
 		connection.query(sql, function (err, result) {
             if (err) {
                 throw err;
