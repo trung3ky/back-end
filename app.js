@@ -26,6 +26,7 @@ var paypalController = require("./controller/paypal");
 var addressController = require("./controller/address");
 var orderController = require("./controller/order");
 
+var shopController = require("./controller/shop");
 
 accountController(app);
 productController(app);
@@ -36,6 +37,7 @@ cartController(app);
 paypalController(app);
 addressController(app);
 orderController(app);
+shopController(app);
 // siginController(app);
 // chat(app);
 
