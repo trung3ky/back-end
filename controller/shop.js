@@ -22,7 +22,12 @@ module.exports = function (app) {
 
 	app.get("/shop/product/:shopId", function (req, res) {
 		const userId = req.params["shopId"];
-		var sql = "select * from shop where id = '" + userId + "'";
+		var sql = `SELECT s.*, COUNT(distinct p.id) as totalProduct, COUNT(r.id) as totalRating FROM shop s
+		INNER JOIN product_new p
+		ON s.id = p.id_shop
+		LEFT JOIN ratings r
+		ON p.id = r.productId
+		 where s.id = '${userId}'`;
 		connection.query(sql, function (err, result) {
 			if (err) {
 				throw err;

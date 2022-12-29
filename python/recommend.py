@@ -270,7 +270,7 @@ def recommend(user_id):
 	                                    prediction.append(-1) #for already rated items
 	                    prediction = pd.Series(prediction)
 	                    prediction = prediction.sort_values(ascending=False)
-	                    recommended = prediction[:3]
+	                    recommended = prediction[:5]
 	#                     print("---------------------------------------------Hello------------------------------" )
 	                    # print("As per  approach....Following books are recommended...")
 	#                     print(recommended,recommended.dtypes)
@@ -282,7 +282,7 @@ def recommend(user_id):
 	#                     print(books.bookTitle[recommended.index[1]].dtypes)
 	                    for i in range(len(recommended)):
 	#                          print("{0}. {1}".format(i+1,books.bookTitle[recommended.index[i]].encode('utf-8')))
-	                         recomend=recomend+books.ISBN[recommended.index[i]]+' , '
+	                         recomend=recomend+books.ISBN[recommended.index[i]]+','
 	                         #recomend=recomend.append(recommended.index[i])
 	                    return recomend
 	                
@@ -336,7 +336,7 @@ def recommend(user_id):
 	str1=[]
 	chk=1
 	recomendi=''
-	if (userID not in ratings.userID.values) or type(userID) is not int:
+	if (int(userID) not in ratings.userID.values):
 	    str12=new_user_recom()
 	    str12=str12.astype(int)
 	    chk=0
@@ -365,4 +365,4 @@ def recommend(user_id):
 	#     print(type(words))
 	#     print(recomend[0])
 	   
-recommend(sys.argv[1])
+recommend(int(sys.argv[1]))

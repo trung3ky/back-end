@@ -26,12 +26,28 @@ const handleWriteFileProduct = () => {
 module.exports = function (app) {
 	app.get("/product", function (req, res, next) {
 		const max_results = req.query.max_results ?? 25;
-		var sql = `select * from product_new limit ${max_results}`;
+		var sql = `SELECT p.* , AVG(r.rating) as avg_rating
+		FROM product_new p 
+        INNER JOIN ratings r
+        ON p.id = r.productId GROUP BY r.productId limit ${max_results}`;
 
 		connection.query(sql, function (err, result) {
 			if (err) {
 				throw err;
-				console.log("🚀 ~ file: product.js:37 ~ console");
+			}
+			res.send(result);
+		});
+	});
+
+	app.get("/product/top-rate", function (req, res, next) {
+		const max_results = req.query.max_results ?? 25;
+		var sql = `SELECT p.* 
+		FROM product_new p 
+		ORDER BY (SELECT AVG(rating) AS avg_rating FROM ratings WHERE productId = p.id) DESC LIMIT ${max_results}`;
+
+		connection.query(sql, function (err, result) {
+			if (err) {
+				throw err;
 			}
 			res.send(result);
 		});

@@ -71,15 +71,12 @@ module.exports = function (app) {
 			if (result.length === 0) {
 				var sql = `insert into users(name, password, date_of_birth, gender, avatar, description, email, delete_at, created_at, updated_at) 
                 values('${name}', '${password}', null, '${gender}', null, null, '${username}', 0, '${TimeNow()}', '${TimeNow()}')`;
-				connection.query(sql, function (err, result) {
+				connection.query(sql, function (err, result1) {
 					if (err) {
 						throw err;
-					}
-					if (result.length > 0) {
+					}else {
 						handleWriteFileUser();
-						res.send(...result);
-					} else {
-						res.send({ message: "not found" });
+						res.json({type: 'ok'});
 					}
 				});
 			} else {
