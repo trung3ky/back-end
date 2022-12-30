@@ -132,6 +132,7 @@ module.exports = function (app) {
       res.redirect("http://localhost:3005/cart")
     });
     function sendMail(data) {
+      console.log("data", data);
       let transporter = nodemailer.createTransport({
         service: 'gmail',
         secure: true,
@@ -146,7 +147,7 @@ module.exports = function (app) {
       // send mail with defined transport object   
       let mailOptions = {
         from: "nvantien222@gmail.com", // sender address
-        to: "16.vantien@gmail.com", // list of receivers
+        to: data.email, // list of receivers
         subject: "Invoice", // Subject line 
         html: pug.renderFile('D:/React Practice/back-end/views/index.pug', { data }), // html body
       };
