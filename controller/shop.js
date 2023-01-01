@@ -50,7 +50,7 @@ module.exports = function (app) {
 		console.log("🚀 ~ file: shop.js:50 ~ description", description)
 
 		var sql = `insert into shop(userId, shop_name, shop_slug, shop_description, shop_avatar, shop_deleted, created_at, updated_at) 
-        values(${userId}, ${name}, '${name}', '${description}', '${image}', 0, '${TimeNow()}', '${TimeNow()}')`;
+        values(${userId}, '${name}', '${name}', '${description}', '${image}', 0, '${TimeNow()}', '${TimeNow()}')`;
 
 		connection.query(sql, function (err, result) {
 			if (err) {
