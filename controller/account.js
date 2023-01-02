@@ -104,4 +104,59 @@ module.exports = function (app) {
 			});
 		});
 	});
+
+	app.post(
+		"/user/update_user/:user_id",
+		urlencodeParser,
+		function (req, res) {
+			const user_id = req.params["user_id"];
+
+			const name = req.body?.name ?? null;
+			const avatar = req.body?.avatar ?? null;
+			const description = req.body?.description ?? null;
+			const gender = req.body?.gender ?? null;
+			const date_of_birth = req.body?.date_of_birth ?? null;
+
+			var sql = `UPDATE users
+				SET name = '${name}',
+				avatar = '${avatar}',
+				description = '${description}',
+				gender = '${gender}',
+				date_of_birth = ${date_of_birth},
+				updated_at = '${TimeNow()}'
+				WHERE id = '${user_id}'`;
+
+			connection.query(sql, function (err, result) {
+				if (err) {
+					res.json({ type: "Update error", message: err.message });
+				} else {
+					res.json({ type: "Update success" });
+				}
+			});
+		}
+	);
+
+	app.post(
+		"/user/update_password/:user_id",
+		urlencodeParser,
+		function (req, res) {
+			const user_id = req.params["user_id"];
+
+			const password = req.body?.password;
+
+			var sql = `UPDATE users
+				SET password = '${password}',
+				updated_at = '${TimeNow()}'
+				WHERE id = '${user_id}'`;
+
+			connection.query(sql, function (err, result) {
+				if (err) {
+					res.json({ type: "Update error", message: err.message });
+				} else {
+					res.json({ type: "Update success" });
+				}
+			});
+		}
+	);
+
 };
