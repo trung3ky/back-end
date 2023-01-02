@@ -13,9 +13,9 @@ module.exports = function (app) {
 				throw err;
 			}
 			if (result.length > 0) {
-				res.send({type: 'OK', data: result[0]});
+				res.send({ type: 'OK', data: result[0] });
 			} else {
-				res.send({ type: 'NOTOK',  message: "not found" });
+				res.send({ type: 'NOTOK', message: "not found" });
 			}
 		});
 	});
@@ -33,21 +33,21 @@ module.exports = function (app) {
 				throw err;
 			}
 			if (result.length > 0) {
-				res.send({type: 'OK', data: result[0]});
+				res.send({ type: 'OK', data: result[0] });
 			} else {
-				res.send({ type: 'NOTOK',  message: "not found" });
+				res.send({ type: 'NOTOK', message: "not found" });
 			}
 		});
 	});
 
-    app.post("/shop/create_shop/:user_id", urlencodeParser, function (req, res) {
+	app.post("/shop/create_shop/:user_id", urlencodeParser, function (req, res) {
 		const userId = req.params["user_id"];
 		const name = req.body?.shop_name ?? null;
 		const image = req.body?.shop_avatar ?? null;
 		const description = req.body?.shop_description ?? null;
 
 		var sql = `insert into shop(userId, shop_name, shop_slug, shop_description, shop_avatar, shop_deleted, created_at, updated_at) 
-        values(${userId}, ${name}, '${name}', '${description}', '${image}', 0, '${TimeNow()}', '${TimeNow()}')`;
+        values(${userId}, '${name}', '${name}', '${description}', '${image}', 0, '${TimeNow()}', '${TimeNow()}')`;
 
 		connection.query(sql, function (err, result) {
 			if (err) {

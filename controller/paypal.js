@@ -17,12 +17,16 @@ module.exports = function (app) {
     'client_secret': process.env.CLIENT_SECRET,
   });
   app.post('/pay', urlencodeParser, (req, res) => {
-    // let { userId, totalPrice, listIdSelect } = req.body;
-    let { userId, total, listId, address } = req.body;
-    // let fullAdress = `${address.address} - ${address.city_name} - ${address.district_name} - ${address.ward_name}`;
+    // let { userId, newTotalPrice, listIdSelect } = req.body;
+    // let { userId, total, listId, address } = req.body; 
+    console.log("Running....")
+    let { userId, totalShip, newTotalPrice, listId, address } = req.body;
+    console.log("BE", userId, totalShip, newTotalPrice, listId)
+    console.log("sum", Number(Number(totalShip) + Number(newTotalPrice)).toFixed(2));
     let fullAdress = `${address.address} - ${address.ward_name} - ${address.district_name} - ${address.city_name}`;
     let emailUser;
     let dataId = []
+    let priceProduct = [];
 
     listId.map(item => dataId.push(item));
     const sql = mysql.format(`select quanlity,product_new.product_image,product_new.product_name,product_new.product_price,users.name,users.email from cart JOIN product_new ON cart.product_id = product_new.id INNER JOIN users ON users.id = cart.user_id where user_id = "${userId}" AND product_id IN (?)`, [dataId]);
@@ -31,13 +35,17 @@ module.exports = function (app) {
       let newR = result.map(item => {
         dataPrint = item;
         let { product_name, product_price, quanlity, name, email } = item;
-        console.log("email: " + email)
+        console.log("product: ", product_price, quanlity)
+        priceProduct.push(product_price * quanlity);
+        // console.log("priceProduct", priceProduct)
+        // console.log("newTotalPricePr", priceProduct.reduce((sum, x) => sum + x))
         emailUser = email;
         return {
           "name": `${product_name}`,
           "sku": "001",
-          "price": product_price,
+          "price": Number(product_price),
           "currency": "USD",
+          "tax": "0.00",
           "quantity": Number(quanlity)
         }
       })
@@ -66,14 +74,20 @@ module.exports = function (app) {
             "items": newR
           },
           "amount": {
+            "total": Number(Number(totalShip) + Number(newTotalPrice)).toFixed(2),
             "currency": "USD",
-            "total": total,
+            "details": {
+              "subtotal": Number(newTotalPrice),
+              "tax": "0.00",
+              "shipping": Number(totalShip)
+            }
           },
-          "description": "Hat for the best team ever"
+          "description": "Hat for the best team ever",
         }]
       };
 
       app.get('/success', (req, res) => {
+        console.log("success")
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
 
@@ -82,13 +96,14 @@ module.exports = function (app) {
           "transactions": [{
             "amount": {
               "currency": "USD",
-              "total": total
+              "total": Number(Number(totalShip) + Number(newTotalPrice)).toFixed(2),
             }
           }]
         };
 
         paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
           if (error) {
+            console.log("có lỗi ")
             console.log(error.response);
             throw error;
           } else {
