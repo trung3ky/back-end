@@ -120,9 +120,9 @@ module.exports = function (app) {
 			var sql = `UPDATE users
 				SET name = '${name}',
 				avatar = '${avatar}',
-				description = '${description}',
+				description = ${description ? `'${description}'` : null},
 				gender = '${gender}',
-				date_of_birth = ${date_of_birth},
+				date_of_birth = ${date_of_birth  ? `'${date_of_birth}'`: null},
 				updated_at = '${TimeNow()}'
 				WHERE id = '${user_id}'`;
 
