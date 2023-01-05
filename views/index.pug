@@ -1,3 +1,4 @@
+
 doctype html
 head
   meta(charset='utf-8')
@@ -11,9 +12,9 @@ section.main-pd-wrapper
     p.shop-name
       | Bill Of Supply VENAM. Retailers
     p.shop-address
-      |  #{data.transactions[0].item_list.shipping_address.line1}
+      |  #{data.payer.payer_info.shipping_address.line1}
       br
-      |                   #{data.transactions[0].item_list.shipping_address.city} #{data.transactions[0].item_list.shipping_address.postal_code} #{data.transactions[0].item_list.shipping_address.country_code}
+      |                   #{data.payer.payer_info.shipping_address.city} #{data.payer.payer_info.shipping_address.postal_code} #{data.payer.payer_info.shipping_address.country_code}
     p
       b Payment-Id:
       |  #{data.id}
@@ -21,11 +22,11 @@ section.main-pd-wrapper
       b Payment-Method:
       |  #{data.payer.payment_method}
     p
-      b Email Customer:
-      |  #{data.email}
+      b Email Payer:
+      |  #{data.payer.payer_info.email}
     p
       b Address Receive:
-      |  #{data.fullAdress}
+      |  #{data.transactions[0].item_list.shipping_address.line1} #{data.transactions[0].item_list.shipping_address.city}
     p
       b Recipient Name:
       |  #{data.transactions[0].item_list.shipping_address.recipient_name}
@@ -37,7 +38,7 @@ section.main-pd-wrapper
       |  #{data.cart} 
     p
       b Time:
-      |  #{new Date(data.create_time).toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' })}
+      |  #{data.update_time}
   table.table-wrap
     thead
       tr
@@ -54,7 +55,17 @@ section.main-pd-wrapper
           td.text-right &#36; #{val.price}
     tfoot.table-footer
       tr
-        th.text-center Total
+        th.text-center Subtotal:
+        th
+        th
+        th.text-right &#36; #{data.transactions[0].amount.details.subtotal}
+      tr
+        th.text-center Shipping:
+        th
+        th
+        th.text-right &#36; #{data.transactions[0].amount.details.shipping}
+      tr
+        th.text-center Total:
         th
         th
         th.text-right &#36; #{data.transactions[0].amount.total}
