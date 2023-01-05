@@ -42,9 +42,12 @@ module.exports = function (app) {
 
 	app.post("/shop/create_shop/:user_id", urlencodeParser, function (req, res) {
 		const userId = req.params["user_id"];
-		const name = req.body?.shop_name ?? null;
-		const image = req.body?.shop_avatar ?? null;
-		const description = req.body?.shop_description ?? null;
+		const name = req.body?.shop_name;
+		console.log("🚀 ~ file: shop.js:46 ~ name", name)
+		const image = req.body?.shop_avatar;
+		console.log("🚀 ~ file: shop.js:48 ~ image", image)
+		const description = req.body?.shop_description;
+		console.log("🚀 ~ file: shop.js:50 ~ description", description)
 
 		var sql = `insert into shop(userId, shop_name, shop_slug, shop_description, shop_avatar, shop_deleted, created_at, updated_at) 
         values(${userId}, '${name}', '${name}', '${description}', '${image}', 0, '${TimeNow()}', '${TimeNow()}')`;
@@ -53,8 +56,39 @@ module.exports = function (app) {
 			if (err) {
 				res.json({ type: "Create error", message: err.message });
 			} else {
+				console.log(result)
 				res.json({ type: "Create success" });
 			}
 		});
 	});
+
+	app.post(
+		"/shop/update_shop/:shopId",
+		urlencodeParser,
+		function (req, res) {
+			const shopId = req.params["shopId"];
+
+			const name = req.body?.shop_name;
+			console.log("🚀 ~ file: shop.js:46 ~ name", name)
+			const image = req.body?.shop_avatar;
+			console.log("🚀 ~ file: shop.js:48 ~ image", image)
+			const description = req.body?.shop_description;
+			console.log("🚀 ~ file: shop.js:50 ~ description", description)
+
+			var sql = `UPDATE shop
+        SET shop_name = '${name}',
+        shop_description = '${description}',
+        shop_avatar = '${image}',
+        updated_at = '${TimeNow()}'
+        WHERE id = '${shopId}'`;
+
+			connection.query(sql, function (err, result) {
+				if (err) {
+					res.json({ type: "Update error", message: err.message });
+				} else {
+					res.json({ type: "Update success" });
+				}
+			});
+		}
+	);
 };

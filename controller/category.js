@@ -3,7 +3,7 @@ var connection = require("./db");
 
 module.exports = function (app) {
 	app.get("/category", function (req, res, next) {
-		var sql = `select * from categories`;
+		var sql = 'select * from categories';
 
 		connection.query(sql, function (err, result) {
 			if (err) {
