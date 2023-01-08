@@ -8,13 +8,12 @@ const sequelize = require('../controller/db2');
 module.exports = function (app) {
     app.get('/order/:user_id', function (req, res, next) {
         const userId = req.params['user_id']
-        const sql = `SELECT *  FROM orders WHERE user_id = ${userId}`
+        const sql = `SELECT *  FROM orders WHERE user_id = ${userId} ORDER BY id DESC`
         connection.query(sql, function (err, result) {
             if (err) {
                 throw err;
             }
             if (result.length > 0) {
-                console.log(result)
                 res.send(result);
             } else {
                 res.send([])
@@ -23,13 +22,14 @@ module.exports = function (app) {
     })
     app.get('/order/product_order/:order_id', function (req, res, next) {
         const order_id = req.params['order_id']
-        const sql = `SELECT product_order.*, product_new.product_name,product_new.product_image,product_new.product_description  FROM product_order LEFT JOIN product_new ON product_new.id = product_order.product_id  WHERE order_id = ${order_id}`
+        const sql = `SELECT product_order.*, product_new.product_name,product_new.product_image,product_new.product_description  
+        FROM product_order LEFT JOIN product_new ON product_new.id = product_order.product_id  
+        WHERE order_id = ${order_id}`
         connection.query(sql, function (err, result) {
             if (err) {
                 throw err;
             }
             if (result.length > 0) {
-                console.log(result)
                 res.send(result);
             } else {
                 res.send([])
@@ -38,6 +38,7 @@ module.exports = function (app) {
     })
     app.post('/order/order_method', async function (req, res, next) {
         let { user_id, totalShip, totalPrice, listId, address } = req.body;
+        console.log("🚀 ~ file: order.js:41 ~ listId", listId)
         let fullAdress = `${address.address} - ${address.ward_name} - ${address.district_name} - ${address.city_name}`;
         let dataId = []
         listId.map(item => dataId.push(item));
@@ -57,6 +58,7 @@ module.exports = function (app) {
                 "quantity": Number(quanlity)
             }
         });
+        
         var sqlOrder = `INSERT INTO orders(user_id,payment_method,status_order,totalPrice,totalShip,shipping_address, create_at,update_at) 
         VALUES (${user_id},1,0,${totalPrice},${totalShip},'${fullAdress}','${TimeNow()}','${TimeNow()}')`;
         connection.query(sqlOrder, function (err, result) {
@@ -68,14 +70,22 @@ module.exports = function (app) {
                     if (err) throw err;
                     // console.log("insert successfully")
                     const sql = mysql.format(`DELETE FROM cart WHERE id IN (?)`, [cartId]);
-                    connection.query(sql, function (err, result) {
+                    connection.query(sql, async function (err, result) {
                         if (err) throw err;
-                        res.send("success");
+                        
+                        const product = await sequelize.query(`select * from product_new where id = ${item.sku}`)
+                        const newQuanlity = product[0][0].product_quanlity - Number(item.quantity)
+                        await sequelize.query(`UPDATE product_new
+                        SET product_quanlity = ${newQuanlity},
+                        updated_at = '${TimeNow()}'
+                        WHERE id = '${item.sku}'`);
+
                     })
                 })
-
+                
             })
-
+            
+            res.send("success");
 
         })
     })
