@@ -13,10 +13,6 @@ const { QueryTypes } = require('sequelize');
 const sequelize = require('../controller/db2');
 
 
-let userId, listId;
-
-
-
 
 module.exports = function (app) {
   paypal.configure({
@@ -26,20 +22,9 @@ module.exports = function (app) {
     'client_secret': process.env.CLIENT_SECRET,
   });
   app.post('/pay', urlencodeParser, async (req, res) => {
-    // let { userId, newTotalPrice, listIdSelect } = req.body;
-    // let { userId, total, listId, address } = req.body; 
-    console.log("Running....")
     let { userId, totalShip, newTotalPrice, listId, address } = req.body;
-    userId = userId
-    // totalShip = totalShip
-    // newTotalPrice = newTotalPrice
-    listId = listId
     let fullAdress = `${address.address} - ${address.ward_name} - ${address.district_name} - ${address.city_name}`;
-
     let dataId = []
-    // let totalPrice = Number(totalShip) + Number(newTotalPrice);
-
-
     let email, nameUser;
     listId.map(item => dataId.push(item));
     const result = await sequelize.query(`select quanlity,product_new.id,product_new.product_image,product_new.product_name,product_new.product_price,users.name,users.email, cart.id as cartId from cart JOIN product_new ON cart.product_id = product_new.id INNER JOIN users ON users.id = cart.user_id WHERE user_id = "${userId}" AND product_id IN(:dataId)`,
@@ -63,7 +48,6 @@ module.exports = function (app) {
         "currency": "USD",
         "quantity": Number(quanlity)
       }
-      // })
     });
 
     const create_payment_json = {
@@ -120,7 +104,6 @@ module.exports = function (app) {
 
   })
   app.get('/success/userId/:userId/totalShip/:totalShip/totalPrice/:totalPrice/email/:email/nameUser/:nameUser/fullAdress/:fullAdress/cartId/:cartId', (req, res) => {
-    console.log("2")
     const userId = req.params["userId"];
     const totalShip = req.params["totalShip"];
     const totalPrice = req.params["totalPrice"];
@@ -146,15 +129,11 @@ module.exports = function (app) {
       console.log(err);
     }
     paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-      console.log("3")
       try {
-        // payment.fullAdress = fullAdress;
-        // payment.email = emailUser;
         var sql = `select id from cart where user_id = ${userId}`;
         connection.query(sql, function (err, result) {
           if (err) throw err;
           if (result.length > 0) {
-
             // payment_method 0: thanh toán qua paypal, 1: thanh toán khác
             // status_order: 0: chờ xác nhận, 1: vận chuyển :
             var sqlOrder = `INSERT INTO orders(user_id,payment_method,status_order,totalPrice,totalShip,shipping_address, create_at,update_at) VALUES (${userId},0,0,${payment.transactions[0].amount.details.subtotal},${payment.transactions[0].amount.details.shipping},'${fullAdress}','${TimeNow()}','${TimeNow()}')`;
@@ -177,19 +156,13 @@ module.exports = function (app) {
               payment.update_time = moment(payment.update_time).format('MMMM do YYYY h:mm:ss a')
               payment.email = email;
               payment.nameUser = nameUser;
-              console.log("payment", payment);
-              // res.json(payment);
               res.render('index', { data: payment })
               sendMail(payment);
             })
           }
         })
-
-
-        // res.json(payment) // null chỗ ni đây
       } catch (error) {
         console.log("có lỗi ")
-        // console.log(error.response);
         HanddleError(error)
       }
     });
@@ -202,7 +175,6 @@ module.exports = function (app) {
 
   app.get('/cancel', (req, res) => {
     console.log('cancelling');
-    // res.send('Cancelled')
     res.redirect("http://localhost:3005/cart")
   });
   function sendMail(data) {
@@ -226,8 +198,6 @@ module.exports = function (app) {
       html: pug.renderFile('D:/React Practice/back-end/views/index.pug', { data }), // html body
     };
     transporter.sendMail(mailOptions, function (error, info) {
-      // Preview only available when sending through an Ethereal account
-      // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
       if (error) {
         console.log(error);
       } else {

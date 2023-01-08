@@ -22,6 +22,22 @@ const handleWriteFileProduct = () => {
 			.pipe(ws);
 	});
 };
+const handleWriteFileJson = () => {
+	// const ws = fs.createWriteStream("data/item_2.json");
+	var sql = `select product_name AS name,product_price AS price from product_new`;
+	connection.query(sql, function (err, result) {
+		if (err) {
+			throw err;
+		}
+		let product_name = result.map((item) => item.name);
+		let product = {
+			"products": result,
+			"items": product_name
+		}
+
+		fs.writeFile('python_chatbot/item_2.json', JSON.stringify(product), () => { });
+	})
+};
 
 module.exports = function (app) {
 	app.get("/product", function (req, res, next) {
@@ -85,6 +101,7 @@ module.exports = function (app) {
 				res.json({ type: "Create error", message: err.message });
 			} else {
 				handleWriteFileProduct();
+				handleWriteFileJson();
 				res.json({ type: "Create success" });
 			}
 		});
@@ -146,44 +163,44 @@ module.exports = function (app) {
 		LEFT JOIN categories ON p.id_category = categories.id 
 		where id_shop = ${shop_id}`;
 		connection.query(sql, function (err, result) {
-            if (err) {
-                throw err;
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send([])
-            }
-        });
+			if (err) {
+				throw err;
+			}
+			if (result.length > 0) {
+				res.send(result);
+			} else {
+				res.send([])
+			}
+		});
 	})
 
 	app.get('/product/category/:category_id', urlencodeParser, (req, res) => {
 		const category_id = req.params["category_id"];
 		const sql = `select * from product_new where id_category = ${category_id}`;
 		connection.query(sql, function (err, result) {
-            if (err) {
-                throw err;
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send([])
-            }
-        });
+			if (err) {
+				throw err;
+			}
+			if (result.length > 0) {
+				res.send(result);
+			} else {
+				res.send([])
+			}
+		});
 	})
 
 	app.get('/product/search/:search', urlencodeParser, (req, res) => {
 		const search = req.params["search"];
 		const sql = `select * from product_new where product_name LIKE '%${search}%'`;
 		connection.query(sql, function (err, result) {
-            if (err) {
-                throw err;
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send([])
-            }
-        });
+			if (err) {
+				throw err;
+			}
+			if (result.length > 0) {
+				res.send(result);
+			} else {
+				res.send([])
+			}
+		});
 	})
 };
