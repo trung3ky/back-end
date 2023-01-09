@@ -141,8 +141,14 @@ module.exports = function (app) {
               if (err) throw err;
               payment.transactions[0].item_list.items.map(item => {
                 var sqlProductOrder = `INSERT INTO product_order(order_id,product_id,quanlity,price,created_at, updated_at) VALUES (${result.insertId},${item.sku},${item.quantity},${item.price},'${TimeNow()}','${TimeNow()}')`;
-                connection.query(sqlProductOrder, function (err, result) {
+                connection.query(sqlProductOrder, async function (err, result) {
                   if (err) throw err;
+                  const product = await sequelize.query(`select * from product_new where id = ${item.sku}`)
+                  const newQuanlity = product[0][0].product_quanlity - Number(item.quantity)
+                  await sequelize.query(`UPDATE product_new
+                          SET product_quanlity = ${newQuanlity},
+                          updated_at = '${TimeNow()}'
+                          WHERE id = '${item.sku}'`);
                   console.log("insert successfully")
                 })
 
@@ -195,7 +201,7 @@ module.exports = function (app) {
       from: "nvantien222@gmail.com", // sender address
       to: data.email, // list of receivers
       subject: `Invoice from Bill Of Supply VENAM. Retailers to ${data.nameUser}`, // Subject line 
-      html: pug.renderFile('D:/React Practice/back-end/views/index.pug', { data }), // html body
+      html: pug.renderFile('C:/Users/TechCare/baitap/back-end/views/index.pug', { data }), // html body
     };
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
