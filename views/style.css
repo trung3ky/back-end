@@ -103,8 +103,27 @@ img {
   background: #fcbd024f;
 }
 
+.btn-group {
+  display: flex;
+  justify-content: center;
+  margin: 5px 0;
+}
+
+.btn-controls {
+  padding: 5px 10px;
+  background-color: #0163d2;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 50px;
+}
+
 @media print {
   .main-pd-wrapper {
     page-break-before: always;
+  }
+
+  .btn-group {
+    display: none;
   }
 }

@@ -38,22 +38,24 @@ module.exports = function (app) {
 			if (err) {
 				throw err;
 			}
-			var sqlCheckAdress = "select * from address where user_id = '" + result[0].id + "' ";
-			connection.query(sqlCheckAdress, function (err, resultCheck) {
-				if (err) throw err;
-				if (result.length > 0) {
+			console.log(result)
+			if (result.length > 0) {
+				var sqlCheckAdress = "select * from address where user_id = '" + result[0].id + "' ";
+				connection.query(sqlCheckAdress, function (err, resultCheck) {
+					if (err) throw err;
 					res.send({
 						...result[0],
 						address: resultCheck.length > 0 ? true : false
 					});
-				} else {
-					res.send({
-						code: "404",
-						type: "login failed",
-						message: "Email and password wrong",
-					});
-				}
-			});
+				});
+			}
+			else {
+				res.send({
+					code: "404",
+					type: "login failed",
+					message: "Email and password wrong",
+				});
+			}
 
 
 		});
@@ -74,9 +76,9 @@ module.exports = function (app) {
 				connection.query(sql, function (err, result1) {
 					if (err) {
 						throw err;
-					}else {
+					} else {
 						handleWriteFileUser();
-						res.json({type: 'ok'});
+						res.json({ type: 'ok' });
 					}
 				});
 			} else {
@@ -122,7 +124,7 @@ module.exports = function (app) {
 				avatar = '${avatar}',
 				description = ${description ? `'${description}'` : null},
 				gender = '${gender}',
-				date_of_birth = ${date_of_birth  ? `'${date_of_birth}'`: null},
+				date_of_birth = ${date_of_birth ? `'${date_of_birth}'` : null},
 				updated_at = '${TimeNow()}'
 				WHERE id = '${user_id}'`;
 

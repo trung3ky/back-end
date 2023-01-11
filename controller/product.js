@@ -24,12 +24,17 @@ const handleWriteFileProduct = () => {
 };
 const handleWriteFileJson = () => {
 	// const ws = fs.createWriteStream("data/item_2.json");
-	var sql = `select product_name AS name,product_price AS price from product_new`;
+	var sql = `select id,product_name AS name,product_price AS price,product_image AS image from product_new`;
 	connection.query(sql, function (err, result) {
 		if (err) {
 			throw err;
 		}
 		let product_name = result.map((item) => item.name);
+		result.map((item, index) => {
+			result[index]["link"] = `http://localhost:3005/product-detail/${item.id}`
+		})
+		JSON.stringify(result)
+		console.log(result);
 		let product = {
 			"products": result,
 			"items": product_name
@@ -40,6 +45,11 @@ const handleWriteFileJson = () => {
 };
 
 module.exports = function (app) {
+	app.get("/product/test", function (req, res, next) {
+		handleWriteFileJson();
+	});
+
+
 	app.get("/product", function (req, res, next) {
 		const max_results = req.query.max_results ?? 25;
 		var sql = `SELECT p.* , AVG(r.rating) as avg_rating
