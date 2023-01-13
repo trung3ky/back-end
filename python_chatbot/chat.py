@@ -15,7 +15,7 @@ from nltk_utils import bag_of_words, tokenize
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-with open('python_chatbot\\intents.json', 'r') as json_data:
+with open('python_chatbot\\intents.json', 'r',encoding="utf-8") as json_data:
     intents = json.load(json_data)
 
 FILE = "python_chatbot\\data.pth"
@@ -59,7 +59,10 @@ def fetch_info(name, type):
     for product in products["products"]:
         if product["name"].lower() == name.lower():
             if type == "specs":
-                return product["price"]+", "+product["delivery time"]+", "+product["size"]+", The ratings are "+product["ratings"]
+                # return product["name"]+", "+product["price"]+", "+product["link"]+", The ratings are "+product["ratings"]
+                return  product["name"]+", "+ str(product["price"]) +",<a href='"+product["link"]+"'><img src='"+product["image"]+"'/></a>"
+            elif type == "link":
+                return "<a href='"+product["link"]+"'>"+product["name"]+"</a>"
             else:
                 return product[type]
     return "No such product found!"
@@ -111,15 +114,10 @@ def chatbot(sentence):
                 resp = str(fetch_info(itm, "delivery time"))
             elif resp == "get size":
                 resp = str(fetch_info(itm, "size"))
-            elif resp == "get ratings":
-                resp = str(fetch_info(itm, "ratings"))
             elif resp == "get link":
                 resp = str(fetch_info(itm, "link"))
             elif resp == "get specs":
-                resp = str(fetch_info(itm, "specs"))
-            elif resp == "get categories":
-                resp = "hello123"
-                # resp = str(fetch_info(itm, "specs"))
+                resp = str(fetch_info(itm, "specs"))  
             else:
                 resp = "I could not understand what to do with "+itm
         else:

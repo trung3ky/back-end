@@ -75,7 +75,7 @@ module.exports = function (app) {
 	// 			res.send({ message: "not found" });
 	// 		}
 	// 	});
-	
+
 	// });
 
 	app.get("/rate/product/:product_id", (req, res) => {
@@ -83,13 +83,13 @@ module.exports = function (app) {
 		const sql1 = `SELECT * FROM ratings WHERE productid = '${productId}'`;
 		const sql2 = "select AVG(rating) AS averageRating,COUNT(id) AS customerRating from ratings where productid = '" + productId + "'";
 		connection.query(sql1, function (error, ratings) {
-		if (error) throw error;
-		if (ratings.length > 0) {
-			connection.query(sql2, function (error, results) {
-				if (error) throw error;
-				res.send({...results[0],ratings});
-			})
-		}
+			if (error) throw error;
+			if (ratings.length > 0) {
+				connection.query(sql2, function (error, results) {
+					if (error) throw error;
+					res.send({ ...results[0], ratings });
+				})
+			}
 		});
 	})
 	// command api
@@ -100,7 +100,7 @@ module.exports = function (app) {
 		const rating = req.body.rating ?? null;
 
 		var sql = `insert into ratings(userid, productid, rating, content, deleted, created_at, updated_at) 
-        values('${userId}', '${productId}', ${rating}, '${content}', 0, '${TimeNow()}', '${TimeNow()}')`;
+        values('${userId}', '${productId}', ${rating * 2}, '${content}', 0, '${TimeNow()}', '${TimeNow()}')`;
 
 		connection.query(sql, function (err, result) {
 			if (err) {

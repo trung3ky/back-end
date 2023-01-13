@@ -161,6 +161,7 @@ module.exports = function (app) {
               payment.create_time = moment(payment.create_time).format('MMMM do YYYY h:mm:ss a')
               payment.update_time = moment(payment.update_time).format('MMMM do YYYY h:mm:ss a')
               payment.email = email;
+              payment.userId = userId;
               payment.nameUser = nameUser;
               res.render('index', { data: payment })
               sendMail(payment);
@@ -201,13 +202,13 @@ module.exports = function (app) {
       from: "nvantien222@gmail.com", // sender address
       to: data.email, // list of receivers
       subject: `Invoice from Bill Of Supply VENAM. Retailers to ${data.nameUser}`, // Subject line 
-      html: pug.renderFile('C:/Users/TechCare/baitap/back-end/views/index.pug', { data }), // html body
+      html: pug.renderFile('views/index.pug', { data }), // html body
     };
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
       } else {
-        // console.log('Email sent: ' + info.response);
+        console.log('Email sent:');
       }
     });
   }

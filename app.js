@@ -4,14 +4,20 @@ var app = express();
 const cors = require("cors");
 var server = require("http").createServer(app);
 
+//Add new
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 app.use("/assets", express.static(__dirname + "/public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'pug')
 app.use(express.static('public'));
 app.use(express.static('views'));
 // parse application/json
 app.use(bodyParser.json());
 app.use(cors());
+
+
 
 // cổng cho server
 var port = 8000;

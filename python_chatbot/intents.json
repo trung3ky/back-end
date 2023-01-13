@@ -137,37 +137,8 @@
         "Are you cash only?"
       ],
       "responses": [
-        "We accept VISA, Mastercard and Paypal",
+        "We accept Paypal and on delivery",
         "We accept most major credit cards, and Paypal"
-      ]
-    },
-    {
-      "tag": "delivery",
-      "patterns": [
-        "How long does delivery of take for",
-        "what is the delivery time of",
-        "what is the shipping time of",
-        "How long does shipping of take for",
-        "How long does the delivery of take for",
-        "What is the duration of my shipping of",
-        "How long will the delivery take for",
-        "What is the duration of my delivery of",
-        "How long will the shipment take for",
-        "How long is the duration of the delivery of",
-        "How long will the delivery take for",
-        "How long is the duration of the shipment for",
-        "What is the duration of my delivery of",
-        "When will my shipment arrive?",
-        "When will my delivery arrive?",
-        "How long will it take for my delivery to arrive",
-        "How long will it take for my shipment to arrive",
-        "How long is the shipment?",
-        "What is the time taken for my shipment of",
-        "What is the time taken for my delivery of",
-        "When do I get my delivery of"
-      ],
-      "responses": [
-        "get delivery"
       ]
     },
     {
@@ -195,59 +166,6 @@
       ],
       "responses": [
         "get price"
-      ]
-    },
-    {
-      "tag": "size",
-      "patterns": [
-        "What is the size of",
-        "How large is the ",
-        "size of ",
-        "How big is the ",
-        "How much is the length of",
-        "What is the dimensions of",
-        "What is the length of",
-        "What is the length",
-        "dimensions of",
-        "The dimensions of",
-        "The length of",
-        "the size of",
-        "How large is",
-        "how big is",
-        "how small is",
-        "how small is the ",
-        "What is the actual size of",
-        "What is the actual dimensions of",
-        "What are the dimensions of the"
-      ],
-      "responses": [
-        "get size"
-      ]
-    },
-    {
-      "tag": "ratings",
-      "patterns": [
-        "What are ratings of the ",
-        "How liked is the ",
-        "ratings of ",
-        "How good is the  ",
-        "What are the user ratings of the  ",
-        "what are the ratings of",
-        "How many ratings is",
-        "What is the user ratings of",
-        "Ratings of",
-        "The ratings of",
-        "the user ratings of",
-        "What is the ratings of",
-        "How much favourable is",
-        "How favourable is",
-        "How is this favourable",
-        "How much did people like",
-        "How much did users like",
-        "User ratings of"
-      ],
-      "responses": [
-        "get ratings"
       ]
     },
     {
@@ -304,19 +222,6 @@
       ],
       "responses": [
         "get specs"
-      ]
-    },
-    {
-      "tag": "categories",
-      "patterns": [
-        "categories of",
-        "can you show me the categories of",
-        "what are the categories of products",
-        "categories of products",
-        "the categories of"
-      ],
-      "responses": [
-        "get categories"
       ]
     }
   ]
