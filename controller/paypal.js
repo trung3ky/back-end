@@ -192,14 +192,14 @@ module.exports = function (app) {
       host: 'smtp.gmail.com',
       port: 465,
       auth: {
-        user: "nvantien222@gmail.com", // generated ethereal user
-        pass: "k j i c t g l j e u b p d i z k", // get from app password google
+        user: "", // generated ethereal user
+        pass: "", // get from app password google
       },
     });
 
     // send mail with defined transport object   
     let mailOptions = {
-      from: "nvantien222@gmail.com", // sender address
+      from: "", // sender address
       to: data.email, // list of receivers
       subject: `Invoice from Bill Of Supply VENAM. Retailers to ${data.nameUser}`, // Subject line 
       html: pug.renderFile('views/index.pug', { data }), // html body

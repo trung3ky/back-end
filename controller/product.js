@@ -29,26 +29,28 @@ const handleWriteFileJson = () => {
 		if (err) {
 			throw err;
 		}
-		let product_name = result.map((item) => item.name);
-		result.map((item, index) => {
-			result[index]["link"] = `http://localhost:3005/product-detail/${item.id}`
-		})
-		JSON.stringify(result)
-		console.log(result);
-		let product = {
-			"products": result,
-			"items": product_name
-		}
+		const sqlCategory = "SELECT display_category FROM categories";
+		connection.query(sqlCategory, function (err, result2) {
+			if (err) {
+				throw err;
+			}
+			let product_name = result.map((item) => item.name);
+			result.map((item, index) => {
+				result[index]["link"] = `http://localhost:3005/product-detail/${item.id}`
+			})
+			category_name = result2.map((item) => item.display_category);
+			let product = {
+				"products": result,
+				"items": product_name,
+				"categories": category_name
+			}
 
-		fs.writeFile('python_chatbot/item_2.json', JSON.stringify(product), () => { });
+			fs.writeFile('python_chatbot/item_2.json', JSON.stringify(product), () => { });
+		})
 	})
 };
 
 module.exports = function (app) {
-	app.get("/product/test", function (req, res, next) {
-		handleWriteFileJson();
-	});
-
 
 	app.get("/product", function (req, res, next) {
 		const max_results = req.query.max_results ?? 25;
