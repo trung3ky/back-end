@@ -9,7 +9,7 @@ from torch.utils.data import Dataset, DataLoader
 from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
 
-with open('intents.json', 'r') as f:
+with open('intents.json', 'r',encoding="utf-8") as f:
     intents = json.load(f)
 
 all_words = []
@@ -23,7 +23,7 @@ for intent in intents['intents']:
     for pattern in intent['patterns']:
         # tokenize each word in the sentence
         w = tokenize(pattern)
-        # add to our words list
+        # add array to our words list
         all_words.extend(w)
         # add to xy pair
         xy.append((w, tag))

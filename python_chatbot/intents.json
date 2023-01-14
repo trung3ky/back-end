@@ -137,7 +137,7 @@
         "Are you cash only?"
       ],
       "responses": [
-        "We accept Paypal and on delivery",
+        "We accept Paypal and Payment after arrival of goods",
         "We accept most major credit cards, and Paypal"
       ]
     },
@@ -222,6 +222,19 @@
       ],
       "responses": [
         "get specs"
+      ]
+    },
+    {
+      "tag": "categories",
+      "patterns": [
+        "categories of",
+        "can you show me the categories of",
+        "what are the categories of products",
+        "categories of products",
+        "the categories of"
+      ],
+      "responses": [
+        "get categories"
       ]
     }
   ]

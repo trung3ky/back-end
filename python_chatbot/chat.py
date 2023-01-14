@@ -31,9 +31,7 @@ model_state = data["model_state"]
 model = NeuralNet(input_size, hidden_size, output_size).to(device)
 model.load_state_dict(model_state)
 model.eval()
-
 bot_name = "Sam"
-
 def get_response(msg):
     sentence = tokenize(msg)
     X = bag_of_words(sentence, all_words)
@@ -102,9 +100,9 @@ def chatbot(sentence):
     bot_name = "Morgan"
     while True:
         #sentence = input("You: ")
-        if sentence == "quit":
-            break
-        itm = check_if_item(sentence)
+        # if sentence == "quit":
+        #     break
+        itm = check_if_item(sentence) 
         if itm != 0: 
             sentence = sentence.replace(itm, "", 1)
             resp = get_response(sentence) 
@@ -126,6 +124,11 @@ def chatbot(sentence):
                 products = json.load(open('python_chatbot\\item_2.json', 'r',encoding="utf-8"))
                 resp = "List of our products are >>>\n"
                 for i in products["items"]:
+                    resp += i + ", "
+        if resp == "get categories":
+                products = json.load(open('python_chatbot\\item_2.json', 'r',encoding="utf-8"))
+                resp = "List of our categories are >>>\n"
+                for i in products["categories"]:
                     resp += i + ", "
         if "get" in resp:
             resp = "Check your product spelling and try again!"
