@@ -1,0 +1,90 @@
+
+doctype html
+head
+  meta(charset='utf-8')
+  title Invoice 
+  style
+      include style.css 
+  script.
+    function printPageArea(areaID){
+    var printContent = document.getElementById(areaID).innerHTML;
+    var originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+    } 
+    function next(userId){ 
+    window.location.href=`http://localhost:3005/order/${userId}`; 
+    } 
+    function back(){ 
+    window.location.href=`http://localhost:3005/cart`; 
+    } 
+section.section-invoice  
+  div.main-pd-wrapper(id="printableArea")
+    .infor-shop
+      div.logo
+        img(src='https://scontent.xx.fbcdn.net/v/t1.15752-9/317341692_629190795673028_8896497606032644690_n.png?stp=dst-png_p206x206&_nc_cat=106&ccb=1-7&_nc_sid=aee45a&_nc_ohc=pF6HQx-x64cAX_mJS7q&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdR8EqXr9RSyC0DnK6PB-gqv2XYFNb6yhft3pKyt4bJelg&oe=63DFA85F' alt='logo')
+      p.shop-name
+        | Bill Of Supply VENAM. Retailers
+      p.shop-address
+        |  #{data.payer.payer_info.shipping_address.line1}
+        br
+        |                   #{data.payer.payer_info.shipping_address.city} #{data.payer.payer_info.shipping_address.postal_code} #{data.payer.payer_info.shipping_address.country_code}
+      p
+        b Payment-Id:
+        |  #{data.id}
+      p
+        b Payment-Method:
+        |  #{data.payer.payment_method}
+      p
+        b Email Payer:
+        |  #{data.payer.payer_info.email}
+      p
+        b Address Receive:
+        |  #{data.transactions[0].item_list.shipping_address.line1} #{data.transactions[0].item_list.shipping_address.city}
+      p
+        b Recipient Name:
+        |  #{data.transactions[0].item_list.shipping_address.recipient_name}
+      p
+        b Pay Id:
+        |  #{data.payer.payer_info.payer_id}
+      p
+        b Cart:
+        |  #{data.cart} 
+      p
+        b Time:
+        |  #{data.update_time}
+    table.table-wrap
+      thead
+        tr
+          th.column-id Id
+          th.column-name Item Name
+          th QTY
+          th.column-price Price
+      tbody
+        each val, index in data.transactions[0].item_list.items
+          tr.invoice-items
+            td #{index + 1}
+            td #{val.name}
+            td #{val.quantity}
+            td.text-right &#36; #{val.price}
+      tfoot.table-footer
+        tr
+          th.text-center Subtotal:
+          th
+          th
+          th.text-right &#36; #{data.transactions[0].amount.details.subtotal}
+        tr
+          th.text-center Shipping:
+          th
+          th
+          th.text-right &#36; #{data.transactions[0].amount.details.shipping}
+        tr
+          th.text-center Total:
+          th
+          th
+          th.text-right &#36; #{data.transactions[0].amount.total}
+  div.btn-group 
+    btn.btn-back.btn-controls(onclick=`back()`) Cart
+    btn.btn-back.btn-controls(onclick="printPageArea('printableArea')") Print
+    btn.btn-next.btn-controls(onclick=`next('${data.userId}')`) Order

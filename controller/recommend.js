@@ -15,10 +15,16 @@ module.exports = function (app) {
 			if (res) {
 				console.log("python");
 				const data = res[0];
-				const transformData = data.slice(1, data.length - 5).replace(new RegExp("'", 'g'), "");
-				console.log("🚀 ~ file: recommend.js:18 ~ PythonShell.run ~ data", transformData)
+				let transformData = data.slice(1, data.length - 5).replace(new RegExp("'", 'g'), "");
+				if(transformData.split("[").length > 0) {
+					transformData = transformData.split("[")[transformData.split("[").length - 1]
+				}
 				const newData = transformData.split(", ").map(item => Number(item));
-				const sql = `select * from product_new where id IN (${newData[0]} ,${newData[1]},${newData[2]},${newData[3]},${newData[4]})`;
+				console.log("🚀 ~ file: recommend.js:21 ~ PythonShell.run ~ newData", newData)
+				const sql = `select p.* , AVG(r.rating) as avg_rating
+				FROM product_new p 
+				INNER JOIN ratings r
+				ON p.id = r.productId where p.id IN (${newData}) GROUP BY r.productId `;
 				connection.query(sql, function (err, result) {
 					if (err) {
 						throw err;

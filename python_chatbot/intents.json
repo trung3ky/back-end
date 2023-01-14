@@ -1,0 +1,241 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hey",
+        "How are you",
+        "Is anyone there?",
+        "Hello",
+        "Good day",
+        "Howdy",
+        "How do you do",
+        "Why hello there",
+        "Hiii",
+        "Hello chatbot",
+        "Can you help me with something?",
+        "hey there chatbot",
+        "hi there chatbot",
+        "hey chatbot!",
+        "Hello there"
+      ],
+      "responses": [
+        "Hey, how may i help you?",
+        "Hello there, how can i be of assistance",
+        "Hi there, what can I do for you?",
+        "Hi there, how can I help?",
+        "How can i be of assistance?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "See you later",
+        "adios",
+        "Bye Bye",
+        "See you around",
+        "bye man",
+        "i shall speak with you later",
+        "lets talk later",
+        "we shall meet again",
+        "im off",
+        "catch you later!",
+        "Cheerio!",
+        "See you soon",
+        "Ill be seeing you soon",
+        "See ya",
+        "Bye for now",
+        "Goodbye chatbot",
+        "Bye chatbot",
+        "Goodbye"
+      ],
+      "responses": [
+        "See you later, thanks for visiting",
+        "Have a nice day",
+        "Hope you come back another time",
+        "Thanks for being here",
+        "Bye Bye!",
+        "Goodbye!",
+        "Bye! Come back again soon."
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks",
+        "Thank you",
+        "That's helpful",
+        "Thank you so much",
+        "Thank you very much",
+        "I appreciate your help",
+        "I appreciate your consideration",
+        "I appreciate your guidance",
+        "I appreciate your time",
+        "My thanks",
+        "My appreciation",
+        "Please accept my deepest thanks",
+        "Thank you for your assistance",
+        "Thank you so much for your help",
+        "Thank you so much for you assistance",
+        "Thank you for your assistance",
+        "Thank's a lot!"
+      ],
+      "responses": [
+        "Happy to help!",
+        "Any time!",
+        "My pleasure"
+      ]
+    },
+    {
+      "tag": "items",
+      "patterns": [
+        "Which items do you have?",
+        "What kinds of items are there?",
+        "What are the list of items you have for sale",
+        "What is your list of items",
+        "What items can you show me",
+        "Show me your list of items",
+        "What kind of items do you sell?",
+        "What do you have in your inventory?",
+        "What is in your inventory",
+        "Show me your inventory",
+        "Please show your list of items",
+        "Can you show me your inventory",
+        "What items do you have in your inventory",
+        "What sort of items do you have in your inventory",
+        "what sort of items do you have",
+        "What is for sale?",
+        "What are the list of items you have for sale?",
+        "What is in your inventory that is for sale?",
+        "Can you show me the items that are on sale?",
+        "What do you sell?"
+      ],
+      "responses": [
+        "get items"
+      ]
+    },
+    {
+      "tag": "payments",
+      "patterns": [
+        "Do you take credit cards?",
+        "Do you accept Mastercard?",
+        "Can I pay with Paypal?",
+        "Can i use my credit card?",
+        "Do you accept only credit cards?",
+        "Do you accept only Paypal?",
+        "What modes of payment do you accept?",
+        "What are your modes of payment preferred",
+        "What are your modes of payment?",
+        "How can i pay here?",
+        "What kind of payment should i do?",
+        "do you accept cash?",
+        "Do you accept credit cards?",
+        "Can i pay with my credit card?",
+        "Shall i pay using Paypal?",
+        "Are you cash only?"
+      ],
+      "responses": [
+        "We accept Paypal and Payment after arrival of goods",
+        "We accept most major credit cards, and Paypal"
+      ]
+    },
+    {
+      "tag": "price",
+      "patterns": [
+        "How much does this cost",
+        "What is the cost of",
+        "How much money does cost",
+        "Cost of",
+        "How much is the cost of",
+        "What is the price of",
+        "How much is the price of",
+        "How much does this cost",
+        "What is the cost",
+        "How much money does this cost",
+        "What is the price for this",
+        "How much money should be payed for",
+        "How much is the price of",
+        "what is the actual price of",
+        "what is the actual cost of",
+        "price of",
+        "The cost of",
+        "The price of",
+        "how is the cost of "
+      ],
+      "responses": [
+        "get price"
+      ]
+    },
+    {
+      "tag": "link",
+      "patterns": [
+        "can you share the link to ",
+        "link me ",
+        "send the link ",
+        "link for this product",
+        "what is the link for",
+        "share the link for",
+        "What is the website for finding",
+        "What is the website for buying",
+        "Show the website containing",
+        "From where can i buy",
+        "Can you show me where to find",
+        "How can i find",
+        "Where can i find",
+        "Link for",
+        "The link for",
+        "Website for",
+        "The website for",
+        "How to find",
+        "Where to find",
+        "How can i find",
+        "Where can i find",
+        "Where is",
+        "What is the link to",
+        "what is the link for buying",
+        "links for these products"
+      ],
+      "responses": [
+        "get link"
+      ]
+    },
+    {
+      "tag": "specs",
+      "patterns": [
+        "specs of",
+        "can you show me the specs of",
+        "what are the specs of",
+        "What are the features",
+        "specifications of",
+        "the specifications of",
+        "the specs of",
+        "features of",
+        "what are the features of",
+        "tell me about the features of",
+        "tell me more about",
+        "tell me about",
+        "tell me more about the specs of",
+        "tell me about the specifications of",
+        "what are the specifications of"
+      ],
+      "responses": [
+        "get specs"
+      ]
+    },
+    {
+      "tag": "categories",
+      "patterns": [
+        "categories of",
+        "can you show me the categories of",
+        "what are the categories of products",
+        "categories of products",
+        "the categories of"
+      ],
+      "responses": [
+        "get categories"
+      ]
+    }
+  ]
+}
